@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>YonU 로그인</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background-color: white;
+      border-bottom: 1px solid #ccc;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .container {
+      max-width: 500px;   /* 400px → 500px */
+      margin: 60px auto;
+      background-color: white;
+      padding: 40px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      font-size: 0.9em;
+      color: gray;
+      margin-bottom: 30px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;       /* 컨테이너 크기에 맞게 자동 확장 */
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .login-btn {
+      background-color: #6db2ff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      width: 100%;       /* 컨테이너 크기에 맞게 자동 확장 */
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .extra-links {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 0.85em;
+    }
+
+    .extra-links a {
+      color: #6db2ff;
+      text-decoration: none;  
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <a href="#">YonU</a>
+      <a href="#">게시판</a>
+      <a href="#">학교 생활</a>
+      <a href="#">학교 공지</a>
+      <a href="#">시간표</a>
+    </div>
+    <div class="nav-right">
+      <a href="#">로그인</a>
+      <a href="#">내 페이지</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2>YonU에 오신 걸 환영합니다</h2>
+    <p class="subtitle">YonU는 연세대학교 유학생 커뮤니티입니다</p>
+
+    <input type="text" placeholder="아이디">
+    <input type="password" placeholder="비밀번호">
+
+    <button class="login-btn">로그인</button>
+
+    <div class="extra-links">
+      <a href="#">아이디/비밀번호 찾기</a>
+      <a href="#">회원가입</a>
+    </div>
+  </div>
+
+</body>
+</html>

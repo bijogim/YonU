@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>YonU 회원가입</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: white;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    nav {
+      background-color: white;
+      border-bottom: 1px solid #ccc;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav .left, nav .right {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .nav-btn {
+      padding: 8px 16px;
+      background-color: #3160e2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    h3 {
+      margin: 60px 0 40px 0;
+      font-size: 22px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+      width: 400px;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 15px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 30px 0;
+    }
+
+    .checkbox input {
+      margin-right: 10px;
+    }
+
+    .signup-btn {
+      background-color: #3160e2;
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 400px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="left">
+      <a href="#"><strong>로고</strong></a>
+      <a href="#">게시판</a>
+      <a href="#">학교생활</a>
+      <a href="#">학교 공지</a>
+      <a href="#">시간표</a>
+    </div>
+    <div class="right">
+      <button class="nav-btn">로그인</button>
+      <button class="nav-btn">내 페이지</button>
+    </div>
+  </nav>
+
+  <h3>회원 정보를 입력해주세요</h3>
+
+  <input type="text" placeholder="아이디">
+  <input type="password" placeholder="비밀번호">
+  <input type="email" placeholder="연세 이메일">
+  <input type="text" placeholder="실명">
+  <input type="text" placeholder="학번">
+  <input type="text" placeholder="학과">
+  <input type="text" placeholder="닉네임">
+  <input type="text" placeholder="사용 언어">
+
+  <div class="checkbox">
+    <input type="checkbox" id="terms">
+    <label for="terms">개인정보 이용 및 회원가입 약관 동의</label>
+  </div>
+
+  <button class="signup-btn">회원가입</button>
+
+</body>
+</html>
