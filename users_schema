@@ -1,0 +1,11 @@
+CREATE TABLE users (
+    email VARCHAR(100) PRIMARY KEY COMMENT '연세 이메일 = 아이디',
+    password VARCHAR(255) NOT NULL COMMENT '암호화된 비밀번호',
+    name VARCHAR(50) NOT NULL COMMENT '실명',
+    student_id VARCHAR(20) NOT NULL COMMENT '학번',
+    department VARCHAR(100) NOT NULL COMMENT '학과',
+    nickname VARCHAR(50) NOT NULL COMMENT '닉네임',
+    preferred_language VARCHAR(20) DEFAULT 'ko' COMMENT '사용 언어 (기본: 한국어)',
+    role TINYINT NOT NULL DEFAULT 1 COMMENT '0: 관리자, 1: 일반 유저',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '가입 시각'
+);
