@@ -1,0 +1,60 @@
+1. 
+CREATE TABLE Menu ( # 상위 메뉴
+  menu_id INT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL
+);
+
+2.
+CREATE TABLE Submenu ( # 서브 메뉴
+  submenu_id INT PRIMARY KEY AUTO_INCREMENT,
+  menu_id INT NOT NULL,
+  name VARCHAR(50) NOT NULL,
+  FOREIGN KEY (menu_id) REFERENCES Menu(menu_id)
+);
+
+3.
+CREATE TABLE Post ( # 게시글 테이블  +  게시판 글쓰기 페이지에도 활용.  +   학교 생활 글에도 활용.
+  post_id INT PRIMARY KEY AUTO_INCREMENT,
+  submenu_id INT NOT NULL,
+  title VARCHAR(100) NOT NULL,
+  content MEDIUMTEXT NOT NULL,
+  author VARCHAR(50) NOT NULL,  
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  comment_count INT DEFAULT 0,
+  view_count INT DEFAULT 0,
+  thumbnail_url VARCHAR(255),     # *썸네일
+  hashtags VARCHAR(255),     # *해시태그
+  FOREIGN KEY (submenu_id) REFERENCES Submenu(submenu_id)
+);
+
+4.
+CREATE TABLE Comment (
+  comment_id INT PRIMARY KEY AUTO_INCREMENT,     # 댓글 번호
+  post_id INT NOT NULL,          # 달린 게시글
+  author VARCHAR(50) NOT NULL,         # 작성자
+  content TEXT NOT NULL,       # 댓글 내용
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,   # 작성 시간
+  FOREIGN KEY (post_id) REFERENCES Post(post_id)
+);
+
+===============================
+데이터 초기화
+
+INSERT INTO Menu (menu_id, name) VALUES
+(0, '메인홈페이지'),
+(1, '게시판'),
+(2, '학교생활'),
+(3, '학교공지'),
+(4, '시간표'),
+(5, '마이페이지');
+
+INSERT INTO Submenu (menu_id, name) VALUES
+(1, '장터게시판'),
+(1, '자유게시판'),
+(1, '새내기게시판'),
+(1, '학과게시판'),
+(2, '학교홍보'),
+(2, '학생회'),
+(2, 'FAQ'),
+(2, '관공서 링크');
