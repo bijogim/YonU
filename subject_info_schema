@@ -1,0 +1,13 @@
+CREATE TABLE subject_info (
+    subject_code VARCHAR(20) PRIMARY KEY,       -- 학정번호-분반-실습
+    semester VARCHAR(10) NOT NULL,              -- 학기
+    campus VARCHAR(20) NOT NULL,                -- 캠퍼스
+    department VARCHAR(100) NOT NULL,           -- 개설전공
+    grade VARCHAR(10),                          -- 학년 (문자열)
+    credit INT,                                 -- 학점
+    subject_name VARCHAR(100),                  -- 교과목명
+    professor VARCHAR(50),                      -- 담당교수
+    classroom VARCHAR(50),                      -- 강의실
+    class_time VARCHAR(50)                      -- 강의시간
+);
+
