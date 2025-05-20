@@ -1,0 +1,10 @@
+CREATE TABLE user_timetable (
+    user_id3 INT NOT NULL,
+    subject_code3 VARCHAR(20) NOT NULL,
+    subject_name3 VARCHAR(100) NOT NULL,
+    color3 VARCHAR(20),
+    PRIMARY KEY (user_id3, subject_code3),
+    FOREIGN KEY (subject_code3) REFERENCES subject_info(subject_code)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
