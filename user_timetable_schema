@@ -1,10 +1,15 @@
 CREATE TABLE user_timetable (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     user_id3 INT NOT NULL,
-    subject_code3 VARCHAR(20) NOT NULL,
-    subject_name3 VARCHAR(100) NOT NULL,
+    subject_code3 VARCHAR(20),
+    subject_name3 VARCHAR(100),
     color3 VARCHAR(20),
-    PRIMARY KEY (user_id3, subject_code3),
+
+    UNIQUE(user_id3, subject_code3),
+
     FOREIGN KEY (subject_code3) REFERENCES subject_info(subject_code)
         ON UPDATE CASCADE
         ON DELETE CASCADE
+    -- 추후 user_id3도 외래키 연결 가능
 );
+
