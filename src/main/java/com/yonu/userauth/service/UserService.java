@@ -14,23 +14,30 @@ import java.util.NoSuchElementException;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final TranslationService translationService;
 
     // ✅ 생성자 주입 방식
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, TranslationService translationService) {
         this.userRepository = userRepository;
+        this.translationService = translationService;
     }
 
     // ✅ 회원가입
     public void register(UserDto dto) {
         User user = new User();
-        user.setEmail(dto.  getEmail());
-        user.setPassword(dto.getPassword());
-        user.setName(dto.getName());
+
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword()); // TODO: 추후 암호화 권장
         user.setStudentId(dto.getStudentId());
-        user.setDepartment(dto.getDepartment());
-        user.setNickname(dto.getNickname());
-        user.setPreferredLanguage(dto.getPreferredLanguage());
+
+        // ✅ 번역 후 "ko|en|ja|zh" 형태로 저장
+        user.setName(translationService.joinAsMultiLang(dto.getName()));
+        user.setDepartment(translationService.joinAsMultiLang(dto.getDepartment()));
+        user.setNickname(translationService.joinAsMultiLang(dto.getNickname()));
+
+        user.setLanguage(dto.getLanguage());  // "ko", "en", "ja", "zh"
         user.setRole(1);
+
         userRepository.save(user);
     }
 

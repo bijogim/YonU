@@ -51,7 +51,7 @@ public class UserController {
             session.setAttribute("studentId", user.getStudentId());
             session.setAttribute("department", user.getDepartment());
             session.setAttribute("nickname", user.getNickname());
-            session.setAttribute("preferredLanguage", user.getPreferredLanguage());
+            session.setAttribute("Language", user.getLanguage());
             session.setAttribute("role", user.getRole());
 
             // ✅ Spring Security 인증 상태 수동 설정

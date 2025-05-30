@@ -73,6 +73,7 @@
       font-size: 0.85em;
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 20px;
     }
 
@@ -80,6 +81,19 @@
       color: #6db2ff;
       text-decoration: none;
     }
+
+    .language-select {
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid #6db2ff;
+      font-size: 0.85em;
+      background-color: white;
+      color: #0f5cb4;
+      font-weight: bold;
+      outline: none;
+      cursor: pointer;
+    }
+
   </style>
 </head>
 <body>
@@ -97,9 +111,17 @@
 </form>
 
 <div class="extra-links">
-  <a href="/reset-password">아이디/비밀번호 찾기</a>
+  <a href="/reset-password">비밀번호 찾기</a>
   <a href="/sign_up">회원가입</a>
+  <select id="languageSelect" class="language-select">
+    <option value="ko">한국어</option>
+    <option value="en">English</option>
+    <option value="cn">中文</option>
+    <option value="jp">日本語</option>
+  </select>
 </div>
+
+
 
 <script>
   document.getElementById('loginForm').addEventListener('submit', async function (e) {
@@ -107,6 +129,7 @@
 
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
+    const language = document.getElementById('languageSelect').value;
 
     if (!emailInput || !passwordInput) {
       alert("입력 필드를 찾을 수 없습니다.");
@@ -121,8 +144,13 @@
       return;
     }
 
-    const loginData = { email, password };
-    const url = '/api/login'; // ✅ Spring API 경로
+    const loginData = {
+      email,
+      password,
+      preferredLanguage: language
+    };
+
+    const url = '/api/login';
 
     console.log("📤 보낸 요청 JSON:");
     console.log(JSON.stringify(loginData, null, 2));
@@ -145,33 +173,14 @@
 
       if (resultText.includes("성공")) {
         alert("✅ 로그인 성공");
-        window.location.href = "/main";  // ✅ 로그인 성공 후 이동
+        window.location.href = "/main";
       } else {
         alert("❌ " + resultText);
       }
 
     } catch (error) {
-      console.warn('❗ 백엔드 연결 실패 또는 응답 불가 → mock 로그인 처리');
-
-      const mockResult = await new Promise((resolve) => {
-        setTimeout(() => {
-          if (email === 'test@yonsei.ac.kr' && password === '1234') {
-            resolve({ status: 'success', message: '로그인 성공! (모의 응답)' });
-          } else {
-            resolve({ status: 'fail', message: '이메일 또는 비밀번호가 틀렸습니다. (모의 응답)' });
-          }
-        }, 500);
-      });
-
-      console.log("📥 받은 응답 JSON (MOCK):");
-      console.log(JSON.stringify(mockResult, null, 2));
-
-      if (mockResult.status === 'success') {
-        alert('✅ ' + mockResult.message);
-        window.location.href = "main.html";  // ✅ 모의 성공 후에도 이동
-      } else {
-        alert('❌ ' + mockResult.message);
-      }
+      console.error("❗ 로그인 요청 실패:", error);
+      alert("⚠️ 서버와 통신 중 오류가 발생했습니다. 나중에 다시 시도해주세요.");
     }
   });
 </script>

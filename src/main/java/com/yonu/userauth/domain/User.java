@@ -24,8 +24,8 @@ public class User {
     private String department;
     private String nickname;
 
-    @Column(name = "preferred_language", columnDefinition = "VARCHAR(20) DEFAULT 'kor'")
-    private String preferredLanguage;
+    @Column(name = "language")
+    private String language;
 
     private int role = 1;
 
