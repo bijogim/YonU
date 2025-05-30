@@ -1,0 +1,40 @@
+-- 1. Language 테이블
+CREATE TABLE Language (
+  language_id INT PRIMARY KEY,
+  language_name VARCHAR(50) NOT NULL
+);
+
+-- 2. 초기 데이터
+INSERT INTO Language (language_id, language_name) VALUES
+(0, '한국어'),
+(1, 'English'),
+(2, '日本語'),
+(3, '中文');
+
+-- 3. Post 테이블에 외래키 추가
+ALTER TABLE Post ADD COLUMN language_id INT DEFAULT 0;
+ALTER TABLE Post ADD CONSTRAINT fk_post_language FOREIGN KEY (language_id) REFERENCES Language(language_id);
+
+-- 4. Comment 테이블에 외래키 추가
+ALTER TABLE Comment ADD COLUMN language_id INT DEFAULT 0;
+ALTER TABLE Comment ADD CONSTRAINT fk_comment_language FOREIGN KEY (language_id) REFERENCES Language(language_id);
+
+-- 5. Menu 테이블에 외래키 추가
+ALTER TABLE Menu ADD COLUMN language_id INT DEFAULT 0;
+ALTER TABLE Menu ADD CONSTRAINT fk_menu_language FOREIGN KEY (language_id) REFERENCES Language(language_id);
+
+-- 6. Submenu 테이블에 외래키 추가
+ALTER TABLE Submenu ADD COLUMN language_id INT DEFAULT 0;
+ALTER TABLE Submenu ADD CONSTRAINT fk_submenu_language FOREIGN KEY (language_id) REFERENCES Language(language_id);
+
+-- 7. subject_info 테이블에 외래키 추가
+ALTER TABLE subject_info ADD COLUMN language_id INT DEFAULT 0;
+ALTER TABLE subject_info ADD CONSTRAINT fk_subject_info_language FOREIGN KEY (language_id) REFERENCES Language(language_id);
+
+-- 8. users 테이블에 외래키 추가
+ALTER TABLE users ADD COLUMN language_id INT DEFAULT 0;
+ALTER TABLE users ADD CONSTRAINT fk_users_language FOREIGN KEY (language_id) REFERENCES Language(language_id);
+
+-- 9. user_timetable 테이블에 외래키 추가
+ALTER TABLE user_timetable ADD COLUMN language_id INT DEFAULT 0;
+ALTER TABLE user_timetable ADD CONSTRAINT fk_user_timetable_language FOREIGN KEY (language_id) REFERENCES Language(language_id);
