@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>YonU 로그인</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    h2 {
+      margin-top: 100px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 0.9em;
+      color: gray;
+      margin-bottom: 30px;
+    }
+
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-left: 15px;
+      font-size: 0.9em;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 90%;
+      max-width: 350px;
+      padding: 10px;
+      margin-bottom: 20px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .login-btn {
+      background-color: #6db2ff;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 90%;
+      max-width: 375px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto;
+      margin-top: 32px;
+      margin-bottom: 10px;
+    }
+
+    .extra-links {
+      margin-top: 15px;
+      font-size: 0.85em;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .extra-links a {
+      color: #6db2ff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h2>YonU에 오신 걸 환영합니다</h2>
+  <p class="subtitle">YonU는 연세대학교 유학생 커뮤니티입니다</p>
+
+  <form id="loginForm">
+    <label for="email">이메일</label>
+    <input id="email" type="text" name="email" placeholder="이메일" required>
+
+    <label for="password">비밀번호</label>
+    <input id="password" type="password" name="password" placeholder="비밀번호" required>
+
+    <button class="login-btn" type="submit">로그인</button>
+  </form>
+
+  <div class="extra-links">
+    <a href="find_id.html">아이디/비밀번호 찾기</a>
+    <a href="sign_up.html">회원가입</a>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+
+      if (!emailInput || !passwordInput) {
+        alert("입력 필드를 찾을 수 없습니다.");
+        return;
+      }
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      if (!email || !password) {
+        alert('이메일과 비밀번호를 모두 입력해주세요.');
+        return;
+      }
+
+      const loginData = { email, password };
+      const url = 'http://localhost:8080/api/login';;
+
+      // ✅ 전송 JSON 로그
+      console.log("📤 보낸 요청 JSON:");
+      console.log(JSON.stringify(loginData, null, 2));
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(loginData)
+        });
+
+        if (!response.ok) throw new Error('서버 응답 오류');
+
+        const result = await response.text();
+
+        // ✅ 응답 JSON 로그
+        console.log("📥 받은 응답 JSON:");
+        console.log(result);
+
+        if (result.includes('성공')) {
+          alert('✅ ' + result);
+          setTimeout(() => {
+    window.location.href = 'main.html'; 
+  }, 300); // 300ms 후 이동
+        } else {
+          alert('❌ ' + result);
+        }
+
+      } catch (error) {
+        console.warn('❗ 백엔드 연결 실패 또는 응답 불가 → mock 로그인 처리');
+
+        const mockResult = await new Promise((resolve) => {
+          setTimeout(() => {
+            if (email === 'test@yonsei.ac.kr' && password === '1234') {
+              resolve({ status: 'success', message: '로그인 성공! (모의 응답)' });
+            } else {
+              resolve({ status: 'fail', message: '이메일 또는 비밀번호가 틀렸습니다. (모의 응답)' });
+            }
+          }, 500);
+        });
+
+        // ✅ mock 응답 로그
+        console.log("📥 받은 응답 JSON (MOCK):");
+        console.log(JSON.stringify(mockResult, null, 2));
+
+        if (mockResult.status === 'success') {
+          alert('✅ ' + mockResult.message);
+        } else {
+          alert('❌ ' + mockResult.message);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
