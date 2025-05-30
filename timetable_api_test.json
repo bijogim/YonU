@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "name": "시간표 API 테스트",
+  "requests": [
+    {
+      "name": "시간표 조회",
+      "method": "GET",
+      "url": "http://localhost:8080/api/timetable/1",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "name": "과목 추가",
+      "method": "POST",
+      "url": "http://localhost:8080/api/timetable",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "queryParams": [
+        {
+          "name": "userId",
+          "value": "1"
+        },
+        {
+          "name": "subjectCode",
+          "value": "CS101"
+        }
+      ]
+    },
+    {
+      "name": "과목 삭제",
+      "method": "DELETE",
+      "url": "http://localhost:8080/api/timetable/1/CS101",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    }
+  ]
+} 
