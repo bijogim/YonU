@@ -19,15 +19,14 @@ public class UserTimetableService {
     @Transactional
     // ✅ 시간표 저장: 기존 데이터 삭제 후 새로 저장
     public void saveTimetable(List<TimetableItemDTO> timetableList, String email) {
-        // 기존 시간표 삭제
         userTimetableRepository.deleteByEmail(email);
 
-        // 새로운 시간표 저장
         List<UserTimetable> userTimetables = timetableList.stream()
+                .filter(dto -> dto.getSubjectCode() != null && !dto.getSubjectCode().isEmpty())  // ❗ null, 빈 값 방어
                 .map(dto -> {
                     UserTimetable ut = new UserTimetable();
                     ut.setEmail(email);
-                    ut.setSubjectCode(dto.getSubjectCode());  // ❗ 이 부분 주의: subjectCode 필드가 추가된 경우에 맞게 수정 필요
+                    ut.setSubjectCode(dto.getSubjectCode());
                     ut.setSubject(dto.getSubject());
                     ut.setDay(dto.getDay());
                     ut.setPeriod(dto.getPeriod());
@@ -47,6 +46,7 @@ public class UserTimetableService {
         return userTimetables.stream()
                 .map(ut -> {
                     TimetableItemDTO dto = new TimetableItemDTO();
+                    dto.setSubjectCode(ut.getSubjectCode()); // ✅ 추가
                     dto.setSubject(ut.getSubject());
                     dto.setDay(ut.getDay());
                     dto.setPeriod(ut.getPeriod());
@@ -56,4 +56,5 @@ public class UserTimetableService {
                 })
                 .collect(Collectors.toList());
     }
+
 }
