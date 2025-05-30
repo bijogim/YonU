@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>아이디/비밀번호 찾기</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    h2 {
+      margin-top: 100px;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    h3 {
+      margin-top: 40px;
+      margin-bottom: 10px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px ;
+      margin-bottom: 30px;
+    }
+
+    input[type="email"],
+    input[type="text"] {
+      width: 400px;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .find-btn {
+      background-color: #6db2ff;
+      color: white;
+      border: none;
+      padding: 9px;
+      width: 425px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .find-btn:hover {
+      background-color: #589ee5;
+    }
+
+    .back-link {
+      margin-top: 20px;
+      font-size: 0.9em;
+    }
+
+    .back-link a {
+      color: #6db2ff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>아이디/비밀번호 찾기</h2>
+
+  <h3>아이디 찾기</h3>
+  <div class="form-group">
+    <input type="email" placeholder="연세 이메일을 입력해주세요">
+    <button class="find-btn">아이디 찾기</button>
+  </div>
+
+  <h3>비밀번호 재설정</h3>
+  <div class="form-group">
+    <input type="email" placeholder="연세 이메일을 입력해주세요">
+    <input type="text" placeholder="아이디를 입력해주세요">
+    <button class="find-btn">비밀번호 찾기</button>
+  </div>
+
+  <div class="back-link">
+    <a href="login.html">로그인 페이지로 돌아가기</a>
+  </div>
+
+</body>
+</html>

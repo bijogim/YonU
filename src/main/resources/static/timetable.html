@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>시간표 | YonU</title>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    nav {
+      background-color: white;
+      border-bottom: 1px solid #ccc;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 20px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .sidebar {
+      width: 200px;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      height: fit-content;
+    }
+
+    .sidebar label { font-weight: bold; }
+
+    .sidebar select, .sidebar button {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .sidebar button {
+      background-color: #3a78c9;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .sidebar button:hover {
+      background-color: #2d5ea7;
+    }
+
+    .section {
+      background-color: white;
+      border-radius: 8px;
+      padding: 20px;
+      flex: 1;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .timetable {
+      display: grid;
+      grid-template-columns: 60px repeat(5, 1fr);
+      border-top: 1px solid #ccc;
+      border-left: 1px solid #ccc;
+    }
+
+    .timetable div {
+      border-right: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+      min-height: 60px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .time-label {
+      background-color: #f0f0f0;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .day-label {
+      background-color: #e7f1ff;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .class-box {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #d0e8ff;
+      padding: 5px;
+      font-size: 13px;
+      color: #003366;
+      box-sizing: border-box;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      position: relative;
+      background-color: white;
+      padding: 20px 20px 10px;
+      border-radius: 8px;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-content input, .modal-content select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .modal-content button {
+      padding: 10px;
+      border: none;
+      background-color: #3a78c9;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 3px;
+      right: 6px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #aaa;
+      cursor: pointer;
+    }
+
+    .close-button:hover {
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 상단 네비게이션 -->
+  <nav>
+    <div class="nav-left">
+      <a href="main.html">
+        <img src="Logo.png" alt="YonU 로고" style="height: 45px;">
+      </a>
+      <a href="#">게시판</a>
+      <a href="#">학교 생활</a>
+      <a href="#">학교 공지</a>
+      <a href="#">시간표</a>
+    </div>
+    <div class="nav-right">
+      <a href="#" class="nav-btn">로그인</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="sidebar">
+      <label>
+        <span contenteditable="true">(제목 수정 가능)</span>
+      </label>
+      <select id="semester">
+        <option>2025년 1학기</option>
+      </select>
+      <button onclick="saveTimetable()">저장하기</button>
+      <button onclick="downloadTimetable()">PNG 다운로드</button>
+    </div>
+
+    <div class="section" id="timetable-section">
+      <h2>📘 나의 시간표</h2>
+      <div class="timetable" id="timetable">
+        <div></div>
+        <div class="day-label">월</div>
+        <div class="day-label">화</div>
+        <div class="day-label">수</div>
+        <div class="day-label">목</div>
+        <div class="day-label">금</div>
+
+        <script>
+          const timetable = document.currentScript.parentElement;
+          const times = ["9시","10시","11시","12시","13시","14시","15시","16시","17시","18시"];
+          for (let i = 0; i < times.length; i++) {
+            timetable.innerHTML += `<div class="time-label">${times[i]}</div>`;
+            for (let j = 0; j < 5; j++) {
+              timetable.innerHTML += `<div data-day="${j}" data-time="${i}" onclick="openModal(this)"></div>`;
+            }
+          }
+        </script>
+      </div>
+    </div>
+  </div>
+
+  <!-- 모달창 -->
+  <div class="modal" id="inputModal">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeModal()">×</span>
+      <input type="text" id="subject" placeholder="과목명">
+      <input type="text" id="room" placeholder="강의실">
+      <input type="text" id="professor" placeholder="교수명">
+      <select id="duration">
+        <option value="1">1시간</option>
+        <option value="2">2시간</option>
+        <option value="3">3시간</option>
+        <option value="4">4시간</option>
+      </select>
+      <button onclick="addClass()">추가</button>
+    </div>
+  </div>
+
+  <script>
+    let selectedCell = null;
+    const subjectColors = {};
+
+    function getRandomColor() {
+      const colors = ['#6FB1FC', '#FFAA85', '#91E5A9', '#FFD56B', '#D3A4FF', '#FF7F7F'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function openModal(cell) {
+      selectedCell = cell;
+      document.getElementById('inputModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('inputModal').style.display = 'none';
+    }
+
+    function addClass() {
+      const subject = document.getElementById('subject').value.trim();
+      const room = document.getElementById('room').value.trim();
+      const professor = document.getElementById('professor').value.trim();
+      const duration = parseInt(document.getElementById('duration').value);
+
+      const day = selectedCell.dataset.day;
+      const time = parseInt(selectedCell.dataset.time);
+
+      if (!subject) {
+        alert("과목명을 입력하세요.");
+        return;
+      }
+
+      if (!subjectColors[subject]) {
+        subjectColors[subject] = getRandomColor();
+      }
+      const bgColor = subjectColors[subject];
+
+      for (let i = 0; i < duration; i++) {
+        const selector = `[data-day="${day}"][data-time="${time + i}"]`;
+        const cell = document.querySelector(selector);
+        if (!cell || cell.innerHTML.trim() !== '') {
+          alert("이미 수업이 있는 시간입니다.");
+          return;
+        }
+      }
+
+      for (let i = 0; i < duration; i++) {
+        const selector = `[data-day="${day}"][data-time="${time + i}"]`;
+        const cell = document.querySelector(selector);
+        if (cell) {
+          const content = (i === 0) ? `${subject}<br>${room}<br>${professor}` : "";
+          cell.innerHTML = `<div class="class-box" style="background-color: ${bgColor};">${content}</div>`;
+        }
+      }
+
+      closeModal();
+      document.getElementById('subject').value = '';
+      document.getElementById('room').value = '';
+      document.getElementById('professor').value = '';
+    }
+
+    function downloadTimetable() {
+      const timetable = document.getElementById('timetable-section');
+      html2canvas(timetable).then(canvas => {
+        const link = document.createElement('a');
+        link.download = '시간표.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+
+    function saveTimetable() {
+      const cells = document.querySelectorAll('[data-day]');
+      const data = [];
+
+      cells.forEach(cell => {
+        const box = cell.querySelector('.class-box');
+        if (box && box.innerText) {
+          const [subject, room] = box.innerText.split('\n');
+          data.push({
+            day: parseInt(cell.dataset.day),
+            time: parseInt(cell.dataset.time),
+            subject,
+            room
+          });
+        }
+      });
+
+      console.log("시간표 JSON 데이터:", JSON.stringify(data));
+      alert("콘솔에 시간표 JSON이 출력되었습니다. 백엔드에 POST로 넘기면 됩니다.");
+    }
+  </script>
+
+</body>
+</html>

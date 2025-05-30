@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>게시판 | YonU</title>
+  <style>
+    * { box-sizing: border-box; }
+
+   body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  min-height: 100vh;
+}
+
+
+    nav {
+      background-color: white;
+      border-bottom: 1px solid #ccc;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    nav a.active {
+      color: #3a78c9;
+    }
+
+    .container {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 0 20px;
+  padding-bottom: 80px; /* 푸터 높이 확보 */
+}
+
+
+    .banner {
+      height: 150px;
+      background-color: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .category-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .category-buttons button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      background-color: #f0f0f0;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .category-buttons button.active {
+  background-color: #3a78c9;
+  color: white;
+}
+
+    .board-item {
+      display: flex;
+      gap: 20px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .board-item:hover {
+      background-color: #f8faff;
+    }
+
+    .board-thumb {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #e0e0e0;
+      flex-shrink: 0;
+    }
+
+    .board-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .board-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #222;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .board-hashtags {
+      color: #3a78c9;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .board-meta {
+      display: flex;
+      gap: 15px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .pagination {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .pagination a {
+      display: inline-block;
+      margin: 0 5px;
+      padding: 8px 14px;
+      color: #007bff;
+      text-decoration: none;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .pagination a:hover {
+      background-color: #eee;
+    }
+
+    .pagination a.current-page {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      border-color: #007bff;
+    }
+
+    .write-btn-wrapper {
+      text-align: right;
+      margin: 30px 0 60px;
+    }
+
+    .write-btn {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      font-size: 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .write-btn:hover {
+      background-color: #555;
+    }
+
+  footer {
+  background-color: #6db2ff;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
+    @media (max-width: 700px) {
+      .board-item { flex-direction: column; align-items: flex-start; }
+      .board-thumb { width: 100%; height: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <a href="main.html"><img src="Logo.png" alt="YonU 로고" style="height: 45px;"></a>
+      <a href="board.html">게시판</a>
+      <a href="campus_life.html">학교 생활</a>
+      <a href="https://mirae.yonsei.ac.kr/wj/1415/subview.do" target="_blank">학교 공지</a>
+      <a href="timetable_loginver.html">시간표</a>
+    </div>
+    <div class="nav-right">
+      <a href="logout.html">로그아웃</a>
+      <a href="mypage.html" style="color: #6db2ff;">내 페이지</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="banner">
+     <img src="images/ad_banner.jpg" alt="광고 배너" style="width: 100%; height: 150px; object-fit: fill; border-radius: 10px;">
+</div>
+
+    <div class="category-buttons">
+      <button id="market-board-btn">장터게시판</button>
+      <button id="free-board-btn">자유게시판</button>
+      <button id="freshman-board-btn">새내기게시판</button>
+      <button id="department-board-btn">학과게시판</button>
+    </div>
+
+    <!-- 게시글 카드 목록 -->
+
+
+
+    <div class="pagination">
+      <a href="#" class="current-page">1</a>
+      <a href="#">2</a>
+      <a href="#">3</a>
+      <a href="#">다음</a>
+    </div>
+
+    <div class="write-btn-wrapper">
+      <button class="write-btn" onclick="location.href='page.html'">글쓰기</button>
+    </div>
+  </div>
+
+  <footer>
+    ⓒ 2025 YonU | 연세대학교 유학생 커뮤니티
+  </footer>
+
+<script>
+  const buttons = document.querySelectorAll('.category-buttons button');
+  const postContainer = document.querySelector('.container');
+
+  const submenuMap = {
+    'market': 1,
+    'free': 2,
+    'freshman': 3,
+    'department': 4
+  };
+
+  let currentSubmenuId = 1;
+  let currentPage = 0;
+
+  function loadPosts(submenuId = 1, page = 0) {
+    currentSubmenuId = submenuId;
+    currentPage = page;
+
+    fetch(`http://localhost:8080/posts?submenuId=${submenuId}&page=${page}&size=10`)
+      .then(response => response.json())
+      .then(data => {
+        const posts = data.content || data;  // Page<Post> 형태 or 단순 List
+        const totalPages = data.totalPages || 1;
+
+        renderPosts(posts);
+        renderPagination(totalPages);
+      })
+      .catch(err => {
+        console.error('게시글 불러오기 실패:', err);
+        postContainer.innerHTML = "<p>게시글을 불러오지 못했습니다.</p>";
+      });
+  }
+
+  function renderPosts(posts) {
+    const existingItems = document.querySelectorAll('.board-item');
+    existingItems.forEach(item => item.remove());
+
+    const pagination = document.querySelector('.pagination');
+
+    posts.forEach(post => {
+      const div = document.createElement('div');
+      div.className = 'board-item';
+      div.onclick = () => {
+        location.href = `board_detail.html?postId=${post.postId}`;
+      };
+      div.innerHTML = `
+    <img class="board-thumb" src="${post.thumbnailUrl ? 'http://localhost:8080' + post.thumbnailUrl : 'https://via.placeholder.com/80'}" alt="썸네일" />
+    <div class="board-content">
+      <div class="board-title">${post.title}</div>
+      <div class="board-hashtags">${post.hashtags || ''}</div>
+      <div class="board-meta">
+        <span>${post.author}</span>
+        <span>${new Date(post.createdAt).toLocaleString()}</span>
+        <span>조회수: ${post.viewCount}</span>
+        <span>댓글수: ${post.commentCount}</span>
+      </div>
+    </div>
+`;
+
+      postContainer.insertBefore(div, pagination);
+    });
+  }
+
+  function renderPagination(totalPages) {
+    const pagination = document.querySelector('.pagination');
+    pagination.innerHTML = "";
+
+    for (let i = 0; i < totalPages; i++) {
+      const a = document.createElement('a');
+      a.href = "#";
+      a.innerText = i + 1;
+      if (i === currentPage) {
+        a.classList.add('current-page');
+      }
+      a.onclick = (e) => {
+        e.preventDefault();
+        loadPosts(currentSubmenuId, i);
+      };
+      pagination.appendChild(a);
+    }
+  }
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      buttons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      const category = button.id.replace('-board-btn', '');
+      loadPosts(submenuMap[category], 0);  // submenuId로 불러오기
+    });
+  });
+
+  // 기본 렌더링
+  document.getElementById('market-board-btn').classList.add('active');
+  loadPosts(1, 0); // 장터게시판 1번
+</script>
+
+</body>
+</html>
