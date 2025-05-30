@@ -11,9 +11,9 @@ public class UserPageController {
         return "login"; // templates/login.html
     }
 
-    @GetMapping("/register")
+    @GetMapping("/sign_up")
     public String registerPage() {
-        return "register"; // templates/register.html
+        return "sign_up"; // templates/register.html
     }
 
     @GetMapping("/reset-password")

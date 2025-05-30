@@ -14,11 +14,14 @@
       text-decoration: none;
     }
 
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f5f5f5;
+    html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
     }
 
     nav {
@@ -43,16 +46,20 @@
       font-size: 15px;
     }
 
+    main {
+      flex: 1;
+    }
+
     .container {
       max-width: 1100px;
       margin: 30px auto;
       padding: 0 20px;
+      padding-bottom: 80px; /* 푸터 높이만큼 여백 확보 */
     }
 
     .section {
       background-color: white;
       border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
       padding: 20px;
       margin-bottom: 30px;
     }
@@ -82,7 +89,6 @@
     .board-item {
       background-color: white;
       border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
       padding: 20px;
       min-height: 150px;
     }
@@ -97,12 +103,28 @@
       font-size: 14px;
     }
 
+    .board-item li a {
+      text-decoration: none;
+      color: black;
+    }
+
+    .board-item li a:hover,
+    .board-item li a:active {
+      text-decoration: underline;
+    }
+
     .more-link {
       display: inline-block;
       margin-top: 8px;
       font-size: 12px;
       color: #3a78c9;
       text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .more-link:hover,
+    .more-link:active {
+      text-decoration: underline;
     }
 
     footer {
@@ -110,7 +132,7 @@
       color: white;
       text-align: center;
       padding: 15px;
-      margin-top: 50px;
+      width: 100%;
     }
 
     @media (max-width: 768px) {
@@ -128,96 +150,119 @@
       <a href="main.html">
         <img src="Logo.png" alt="YonU 로고" style="height: 45px;">
       </a>
-      <a href="#">게시판</a>
-      <a href="#">학교 생활</a>
+      <a href="board.html">게시판</a>
+      <a href="campus_life.html">학교 생활</a>
       <a href="#">학교 공지</a>
-      <a href="#">시간표</a>
+      <a href="timetable_loginver.html">시간표</a>
     </div>
     <div class="nav-right">
-      <a href="#" class="nav-btn">로그인</a>
+      <a href="login.html" class="nav-btn">로그인</a>
     </div>
   </nav>
 
-  <div class="container">
+  <main>
+    <div class="container">
 
-    <!-- 일정 섹션 -->
-    <div class="section">
-      <h2>📅 주요 일정</h2>
-      <div class="calendar">
-        캘린더 자리입니다
+      <!-- 일정 섹션 -->
+      <div class="section">
+        <h2>📅 주요 일정</h2>
+        <div class="calendar">
+          캘린더 자리입니다
+        </div>
       </div>
+
+      <div class="board-grid">
+
+        <div class="board-item">
+          <h2><a href="market-board.html">장터 게시판</a></h2>
+          <ul>
+            <li><a href="post.html?id=1">자취방 정리합니다 - 조회수: 123</a></li>
+            <li><a href="post.html?id=2">중고 모니터 팝니다 - 조회수: 98</a></li>
+            <li><a href="post.html?id=3">의자 드림 - 조회수: 76</a></li>
+          </ul>
+          <a class="more-link" href="market-board.html">더보기</a>
+        </div>
+
+        <div class="board-item">
+          <h2><a href="free-board.html">자유 게시판</a></h2>
+          <ul>
+            <li><a href="post.html?id=101">오늘 뭐 먹지? - 조회수: 200</a></li>
+            <li><a href="post.html?id=102">이 영화 본 사람? - 조회수: 150</a></li>
+            <li><a href="post.html?id=103">운동 같이 하실 분 - 조회수: 110</a></li>
+          </ul>
+          <a class="more-link" href="free-board.html">더보기</a>
+        </div>
+
+        <div class="board-item">
+          <h2><a href="freshmen-board.html">새내기 게시판</a></h2>
+          <ul>
+            <li><a href="post.html?id=201">기숙사 꿀팁 공유 - 조회수: 87</a></li>
+            <li><a href="post.html?id=202">OT 언제 하죠? - 조회수: 65</a></li>
+            <li><a href="post.html?id=203">교수님 강의 추천해주세요 - 조회수: 40</a></li>
+          </ul>
+          <a class="more-link" href="freshmen-board.html">더보기</a>
+        </div>
+
+        <div class="board-item">
+          <h2><a href="major-board.html">학과 게시판</a></h2>
+          <ul>
+            <li><a href="post.html?id=301">자료구조 팀원 구해요 - 조회수: 120</a></li>
+            <li><a href="post.html?id=302">전공 선택 조언 좀요 - 조회수: 98</a></li>
+            <li><a href="post.html?id=303">중간고사 족보 있으신 분? - 조회수: 88</a></li>
+          </ul>
+          <a class="more-link" href="major-board.html">더보기</a>
+        </div>
+
+      </div>
+
+      <!-- 게시판 영역 -->
+      <div id="boardContainer" class="board-grid"></div>
     </div>
-
-    <!-- 게시판 영역 -->
-    <div class="board-grid">
-
-      <div class="board-item">
-        <h2><a href="qa-board.html">Q&A</a></h2>
-        <ul>
-          <li>영어인터뷰 하는 방법 - 조회수: 2</li>
-          <li>진짜졸업냐고묻다 - 조회수: 1</li>
-          <li>여러분 프로젝트를 하십시... - 조회수: 0</li>
-        </ul>
-        <a class="more-link" href="qa-board.html">더보기</a>
-      </div>
-
-      <div class="board-item">
-        <h2><a href="qa-extension-board.html">Q&A 확장</a></h2>
-        <ul>
-          <li>영어인터뷰 하는 방법 - 조회수: 2</li>
-          <li>진짜졸업냐고묻다 - 조회수: 1</li>
-          <li>여러분 프로젝트를 하십시... - 조회수: 0</li>
-        </ul>
-        <a class="more-link" href="qa-extension-board.html">더보기</a>
-      </div>
-
-      <div class="board-item">
-        <h2><a href="other-board.html">기타 게시판</a></h2>
-        <ul>
-          <li>영어인터뷰 하는 방법 - 조회수: 2</li>
-          <li>진짜졸업냐고묻다 - 조회수: 1</li>
-          <li>여러분 프로젝트를 하십시... - 조회수: 0</li>
-        </ul>
-        <a class="more-link" href="other-board.html">더보기</a>
-      </div>
-
-      <div class="board-item">
-        <h2><a href="school-notice-board.html">학교 공지</a></h2>
-        <ul>
-          <li>영어인터뷰 하는 방법 - 조회수: 2</li>
-          <li>진짜졸업냐고묻다 - 조회수: 1</li>
-          <li>여러분 프로젝트를 하십시... - 조회수: 0</li>
-        </ul>
-        <a class="more-link" href="school-notice-board.html">더보기</a>
-      </div>
-
-      <div class="board-item">
-        <h2><a href="international-board.html">국제처 공지</a></h2>
-        <ul>
-          <li>영어인터뷰 하는 방법 - 조회수: 2</li>
-          <li>진짜졸업냐고묻다 - 조회수: 1</li>
-          <li>여러분 프로젝트를 하십시... - 조회수: 0</li>
-        </ul>
-        <a class="more-link" href="international-board.html">더보기</a>
-      </div>
-
-      <div class="board-item">
-        <h2><a href="student-council-board.html">학생회 공지</a></h2>
-        <ul>
-          <li>영어인터뷰 하는 방법 - 조회수: 2</li>
-          <li>진짜졸업냐고묻다 - 조회수: 1</li>
-          <li>여러분 프로젝트를 하십시... - 조회수: 0</li>
-        </ul>
-        <a class="more-link" href="student-council-board.html">더보기</a>
-      </div>
-
-    </div>
-  </div>
+  </main>
 
   <!-- 푸터 -->
   <footer>
     ⓒ 2025 YonU | 연세대학교 유학생 커뮤니티
   </footer>
+
+  <script>
+    const boardMap = {
+      "장터게시판": { title: "장터 게시판", link: "other-board.html" },
+      "자유게시판": { title: "자유 게시판", link: "school-notice-board.html" },
+      "새내기게시판": { title: "새내기 게시판", link: "international-board.html" },
+      "학과게시판": { title: "학과 게시판", link: "student-council-board.html" },
+    };
+
+    fetch('http://localhost:8080/api/posts/by-menu/1')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('boardContainer');
+        container.innerHTML = '';
+
+        data.forEach(section => {
+          const { submenuName, posts } = section;
+          const board = boardMap[submenuName];
+          if (!board) return;
+
+          const boardItem = document.createElement('div');
+          boardItem.className = 'board-item';
+
+          const boardTitle = `
+            <h2><a href="${board.link}">${board.title}</a></h2>
+            <ul>
+              ${posts.map(post => `<li>${post.title} - 조회수: ${post.viewCount}</li>`).join('')}
+            </ul>
+            <a class="more-link" href="${board.link}">더보기</a>
+          `;
+
+          boardItem.innerHTML = boardTitle;
+          container.appendChild(boardItem);
+        });
+      })
+      .catch(err => {
+        console.error('게시판 데이터를 불러오는 데 실패했습니다:', err);
+      });
+  </script>
 
 </body>
 </html>

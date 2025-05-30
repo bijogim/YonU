@@ -6,6 +6,11 @@ import com.yonu.userauth.service.UserService;
 import com.yonu.userauth.service.EmailService;
 import com.yonu.userauth.domain.User;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -24,21 +29,22 @@ public class UserController {
     private EmailService emailService;
 
     // ✅ 회원가입
-    @PostMapping("/register")
+    @PostMapping("/sign_up")
     public ResponseEntity<String> register(@RequestBody UserDto dto) {
         userService.register(dto);
         return ResponseEntity.ok("회원가입 성공");
     }
 
-    // ✅ 로그인 + 세션 저장
+    // ✅ 로그인 + 세션 저장 + Spring Security 인증 설정
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginDto dto, HttpSession session) {
         boolean result = userService.login(dto);
+
         if (result) {
-            // dto.email 대신 getter 사용 권장
+            // ✅ 로그인된 사용자 정보 조회
             User user = userService.findByEmail(dto.getEmail());
 
-            // 세션에 사용자 정보 저장
+            // ✅ 세션에 사용자 정보 저장
             session.setAttribute("email", user.getEmail());
             session.setAttribute("password", user.getPassword());
             session.setAttribute("name", user.getName());
@@ -48,11 +54,27 @@ public class UserController {
             session.setAttribute("preferredLanguage", user.getPreferredLanguage());
             session.setAttribute("role", user.getRole());
 
+            // ✅ Spring Security 인증 상태 수동 설정
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            user.getEmail(), null,
+                            List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                    );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
             return ResponseEntity.ok("로그인 성공");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
         }
     }
+
+
+    @PostMapping("/logout")  // 로그아웃
+    public ResponseEntity<String> logout(HttpSession session) {
+        session.invalidate(); // 모든 세션 속성 제거 및 세션 무효화
+        return ResponseEntity.ok("로그아웃 성공");
+    }
+
 
     // ✅ 비밀번호 재설정
     @PostMapping("/reset-password")

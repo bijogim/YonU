@@ -23,7 +23,7 @@ public class UserService {
     // ✅ 회원가입
     public void register(UserDto dto) {
         User user = new User();
-        user.setEmail(dto.getEmail());
+        user.setEmail(dto.  getEmail());
         user.setPassword(dto.getPassword());
         user.setName(dto.getName());
         user.setStudentId(dto.getStudentId());
