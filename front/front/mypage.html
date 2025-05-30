@@ -352,29 +352,39 @@ window.onload = function() {
     if (languageSelect && data.preferredLanguage) {
       languageSelect.value = data.preferredLanguage;
     }
+
+    // ✅ 로그인된 경우 nav-right 교체
+    const navRight = document.getElementById('navRight');
+    navRight.innerHTML = `
+      <span>
+        ${data.nickname}님
+        <a href="#" class="nav-btn" id="logoutBtn">로그아웃</a>
+      </span>
+    `;
+
+    // 로그아웃 버튼 이벤트 등록
+    document.getElementById('logoutBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      fetch('http://localhost:8080/api/logout', {
+        method: 'POST',
+        credentials: 'include'
+      })
+      .then(() => {
+        alert('로그아웃 되었습니다.');
+        window.location.href = 'login.html';
+      })
+      .catch(err => {
+        console.error('로그아웃 실패:', err);
+      });
+    });
+
   })
   .catch(error => {
     console.error('❌ 유저 정보 불러오기 실패:', error);
-    alert('로그인이 필요합니다.');
-    window.location.href = 'login.html';  // 로그인 안 되어 있으면 로그인 페이지로 이동
+    // 로그인 안 된 경우는 그대로 두기
   });
 };
-
-  document.getElementById('logoutBtn').addEventListener('click', (e) => {
-    e.preventDefault(); // 기본 a 태그 이동 막기
-    fetch('http://localhost:8080/api/logout', {
-      method: 'POST',
-      credentials: 'include'
-    })
-    .then(() => {
-      alert('로그아웃 되었습니다.');
-      window.location.href = 'login.html'; // ✅ 로그아웃 후 로그인 페이지로 이동
-    })
-    .catch(err => {
-      console.error('로그아웃 실패:', err);
-    });
-  });
-
 </script>
+
 </body>
 </html>
