@@ -268,12 +268,11 @@
       </a>
       <a href="board.html">게시판</a>
       <a href="campus_life.html">학교 생활</a>
-      <a href="https://mirae.yonsei.ac.kr/wj/1415/subview.do">학교 공지</a>
+      <a href="#">학교 공지</a>
       <a href="timetable_loginver.html">시간표</a>
     </div>
-    <div class="nav-right">
-      <a href="logout.html">로그아웃</a>
-      <a href="mypage.html">내 페이지</a>
+    <div class="nav-right" id="navRight">
+      <a href="login.html" class="nav-btn">로그인</a>
     </div>
   </nav>
 
@@ -360,6 +359,22 @@ window.onload = function() {
     window.location.href = 'login.html';  // 로그인 안 되어 있으면 로그인 페이지로 이동
   });
 };
+
+  document.getElementById('logoutBtn').addEventListener('click', (e) => {
+    e.preventDefault(); // 기본 a 태그 이동 막기
+    fetch('http://localhost:8080/api/logout', {
+      method: 'POST',
+      credentials: 'include'
+    })
+    .then(() => {
+      alert('로그아웃 되었습니다.');
+      window.location.href = 'login.html'; // ✅ 로그아웃 후 로그인 페이지로 이동
+    })
+    .catch(err => {
+      console.error('로그아웃 실패:', err);
+    });
+  });
+
 </script>
 </body>
 </html>
