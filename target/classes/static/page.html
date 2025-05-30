@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        nav {
+            background-color: white;
+            border-bottom: 1px solid #ccc;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-left, .nav-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        nav a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        nav a.active {
+            color: #3a78c9;
+        }
+        .content {
+            padding: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .input-group select,
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #e8ecef;
+            box-sizing: border-box;
+        }
+        .input-group select {
+            appearance: none;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDE2IDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEgMUw4IDdNMTUgMSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+') no-repeat right 10px center;
+            background-size: 12px;
+        }
+        .toolbar {
+            display: flex;
+            align-items: center;
+            background-color: #e0e0e0;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .toolbar button {
+            background: none;
+            border: none;
+            padding: 5px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .toolbar button:hover {
+            background-color: #d0d0d0;
+        }
+        .toolbar .spacer {
+            flex-grow: 1;
+        }
+        .toolbar .dropdown {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            border-radius: 4px;
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 100px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 4px;
+            right: 0;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 8px 12px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #f0f0f0;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .editor {
+            width: 100%;
+            height: 200px;
+            border: 1px solid #ccc;
+            background-color: #e8ecef;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+            padding: 5px;
+            outline: none;
+            resize: none;
+            box-sizing: border-box;
+        }
+        .submit-button {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+        .submit-button button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .submit-button button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <a href="main.html"><img src="Logo.png" alt="YonU 로고" style="height: 45px;"></a>
+      <a href="board.html">게시판</a>
+      <a href="campus_life.html">학교 생활</a>
+      <a href="https://mirae.yonsei.ac.kr/wj/1415/subview.do" target="_blank">학교 공지</a>
+      <a href="timetable_loginver.html">시간표</a>
+    </div>
+    <div class="nav-right">
+      <a href="logout.html">로그아웃</a>
+      <a href="mypage.html" style="color: #6db2ff;">내 페이지</a>
+    </div>
+  </nav>
+
+  <div id="logoutMessage" style="
+    display: none;
+    margin: 20px auto;
+    width: 300px;
+    padding: 20px;
+    background-color: #e0f7fa;
+    color: #00796b;
+    border: 1px solid #00796b;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+  ">
+    로그아웃 되었습니다.
+  </div>
+
+    <div class="content">   
+        <div class="input-group">
+            <label>게시판</label>
+            <select id="boardSelect">
+  <option value="1">장터게시판</option>
+  <option value="2">자유게시판</option>
+  <option value="3">새내기게시판</option>
+  <option value="4">학과게시판</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>제목</label>
+            <input type="text" placeholder="제목을 입력해주세요."  id="postTitle">
+        </div>
+        <div class="input-group">
+    <label>썸네일 이미지</label>
+    <input type="file" id="thumbnailImage" accept="image/*">
+</div>
+
+<div class="input-group">
+    <label>해시태그</label>
+    <input type="text" id="hashtags" placeholder="#예시 #해시태그를 #입력해주세요">
+</div>
+        <div class="input-group">
+            <div class="toolbar">
+                <button onclick="document.execCommand('undo', false, null)">←</button>
+                <button onclick="document.execCommand('redo', false, null)">→</button>
+                <button onclick="document.execCommand('bold', false, null)">B</button>
+                <button onclick="document.execCommand('italic', false, null)">I</button>
+                <button onclick="document.execCommand('underline', false, null)">U</button>
+                <button onclick="document.execCommand('justifyLeft', false, null)">≡</button>
+                <button onclick="document.execCommand('justifyCenter', false, null)">≡</button>
+                <button onclick="document.execCommand('justifyRight', false, null)">≡</button>
+                <button onclick="insertImage()">🖼️</button>
+                <button onclick="insertLink()">🔗</button>
+                <div class="spacer"></div>
+                <div class="dropdown">
+                    글씨체
+                    <div class="dropdown-content">
+                        <a href="#" onclick="changeFont('Gungsuh')">궁서체</a>
+                        <a href="#" onclick="changeFont('Malgun Gothic')">맑은고딕</a>
+                    </div>
+                </div>
+            </div>
+            <div class="editor" contenteditable="true" id="editor"></div>
+            <div class="submit-button">
+                  <button id="submit-btn">작성하기</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+document.getElementById('submit-btn').addEventListener('click', function() {
+    const submenuId = document.getElementById('boardSelect').value;
+    const title = document.getElementById('postTitle').value;
+    const content = document.getElementById('editor').innerHTML;
+    const hashtags = document.getElementById('hashtags').value;
+    const thumbnailFile = document.getElementById('thumbnailImage').files[0];
+
+    if (!submenuId || !title || !content.trim()) {
+        alert("게시판, 제목, 내용을 모두 입력해주세요.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('submenuId', submenuId);
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('author', '익명');
+    formData.append('hashtags', hashtags);
+    if (thumbnailFile) {
+        formData.append('thumbnail', thumbnailFile);
+    }
+
+    fetch('http://localhost:8080/posts', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('게시글이 성공적으로 등록되었습니다!');
+            window.location.href = 'board.html'; // 성공 후 게시판 이동
+        } else {
+            alert('게시글 등록에 실패했습니다.');
+        }
+    })
+    .catch(error => {
+        console.error('게시글 등록 중 오류:', error);
+        alert('서버 오류가 발생했습니다.');
+    });
+});
+</script>
+</body>
+</html>

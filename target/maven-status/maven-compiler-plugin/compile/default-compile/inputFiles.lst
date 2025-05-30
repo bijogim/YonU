@@ -1,0 +1,16 @@
+C:\Users\jnjio\community\src\main\java\com\yonu\community\CommunityApplication.java
+C:\Users\jnjio\community\src\main\java\com\yonu\community\controller\CommentController.java
+C:\Users\jnjio\community\src\main\java\com\yonu\community\controller\PostController.java
+C:\Users\jnjio\community\src\main\java\com\yonu\community\controller\SubmenuController.java
+C:\Users\jnjio\community\src\main\java\com\yonu\community\entity\Comment.java
+C:\Users\jnjio\community\src\main\java\com\yonu\community\entity\Menu.java
+C:\Users\jnjio\community\src\main\java\com\yonu\community\entity\Post.java
+C:\Users\jnjio\community\src\main\java\com\yonu\community\entity\Submenu.java
+C:\Users\jnjio\community\src\main\java\com\yonu\community\repository\CommentRepository.java
+C:\Users\jnjio\community\src\main\java\com\yonu\community\repository\MenuRepository.java
+C:\Users\jnjio\community\src\main\java\com\yonu\community\repository\PostRepository.java
+C:\Users\jnjio\community\src\main\java\com\yonu\community\repository\SubmenuRepository.java
+C:\Users\jnjio\community\src\main\java\com\yonu\community\service\CommentService.java
+C:\Users\jnjio\community\src\main\java\com\yonu\community\service\CommentServiceImpl.java
+C:\Users\jnjio\community\src\main\java\com\yonu\community\service\PostService.java
+C:\Users\jnjio\community\src\main\java\com\yonu\community\service\PostServiceImpl.java

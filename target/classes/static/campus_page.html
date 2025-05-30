@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>글쓰기 | 게시판</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0; /* 패딩 제거 */
+      background-color: #f5f5f5;
+    }
+    nav {
+      background-color: white;
+      border-bottom: 1px solid #ccc;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    nav a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+      font-size: 15px;
+    }
+    nav a.active {
+      color: #3a78c9;
+    }
+    .form-container {
+      max-width: 800px;
+      margin: 40px auto 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    .form-group input[type="text"],
+    .form-group select,
+    .form-group textarea,
+    .form-group input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .form-group textarea {
+      height: 200px;
+      resize: vertical;
+    }
+    .submit-btn {
+      background-color: #3a78c9;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .submit-btn:hover {
+      background-color: #2c5ca3;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <a href="main.html"><img src="Logo.png" alt="YonU 로고" style="height: 45px;"></a>
+      <a href="board.html">게시판</a>
+      <a href="campus_life.html">학교 생활</a>
+      <a href="https://mirae.yonsei.ac.kr/wj/1415/subview.do" target="_blank">학교 공지</a>
+      <a href="timetable_loginver.html">시간표</a>
+    </div>
+    <div class="nav-right">
+      <a href="logout.html">로그아웃</a>
+      <a href="mypage.html" style="color: #6db2ff;">내 페이지</a>
+    </div>
+  </nav>
+
+  <div class="form-container">
+    <h2>게시글 작성</h2>
+    <div class="form-group">
+      <label for="board">게시판 선택</label>
+      <select id="board">
+        <option value="1">학교 공지</option>
+        <option value="2">학교생활</option>
+        <option value="3">FAQ</option>
+        <option value="4">관공서 링크</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="title">제목</label>
+      <input type="text" id="title" placeholder="제목을 입력해주세요">
+    </div>
+
+    <div class="form-group">
+      <label for="content">본문</label>
+      <textarea id="content" placeholder="내용을 입력해주세요"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="file">첨부파일</label>
+      <input type="file" id="file">
+    </div>
+
+    <button class="submit-btn" onclick="submitPost()">작성하기</button>
+  </div>
+
+<script>
+const boardSelect = document.getElementById('board');
+const fileInput = document.getElementById('file');
+
+// 게시판 변경될 때마다 파일 업로드 가능 여부 설정
+boardSelect.addEventListener('change', function() {
+  const selectedBoard = boardSelect.value;
+  if (selectedBoard === "3" || selectedBoard === "4") {
+    // FAQ, 관공서 링크: 첨부파일 비활성화
+    fileInput.disabled = true;
+    fileInput.value = ""; // 선택된 파일도 제거
+  } else {
+    // 학교공지, 학교생활: 첨부파일 활성화
+    fileInput.disabled = false;
+  }
+});
+
+function submitPost() {
+  const board = document.getElementById("board").value;
+  const title = document.getElementById("title").value.trim();
+  const content = document.getElementById("content").value.trim();
+  const fileInput = document.getElementById("file");
+  const file = fileInput.files[0];
+
+  if (!title || !content || board === "0") {
+    alert("제목, 본문, 게시판을 확인해주세요.");
+    return;
+  }
+
+  const boardToSubmenuId = {
+    1: 5, // 학교공지
+    2: 6, // 학교생활
+    3: 7, // FAQ
+    4: 8  // 관공서 링크
+  };
+  const submenuId = boardToSubmenuId[board];
+
+  const author = "익명";
+
+  if (board === "1" || board === "2") {
+    // 학교공지, 학교생활: 첨부파일 가능
+    const formData = new FormData();
+    formData.append("submenuId", submenuId);
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("author", author);
+    formData.append("hashtags", "");
+    if (file) {
+      formData.append("thumbnail", file);
+    }
+
+    fetch('http://localhost:8080/posts', {   // 🔥 여기 수정! /posts로!
+      method: 'POST',
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('게시글 등록 실패');
+      }
+      return response.json();
+    })
+    .then(data => {
+      alert("게시물이 성공적으로 작성되었습니다.");
+      window.location.href = "campus_life.html#school-life";
+    })
+    .catch(error => {
+      console.error('게시글 작성 에러:', error);
+      alert('게시글 작성에 실패했습니다.');
+    });
+
+  } else {
+    // FAQ, 관공서 링크: 첨부파일 없음
+    const postData = {
+      submenuId: submenuId,
+      title: title,
+      content: content,
+      author: author,
+      hashtags: "",
+      thumbnailUrl: ""
+    };
+
+    fetch('http://localhost:8080/posts/json', {  // JSON용 별도 엔드포인트
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(postData)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('게시글 등록 실패');
+      }
+      return response.json();
+    })
+    .then(data => {
+      alert("게시물이 성공적으로 작성되었습니다.");
+      window.location.href = "campus_life.html#school-life";
+    })
+    .catch(error => {
+      console.error('게시글 작성 에러:', error);
+      alert('게시글 작성에 실패했습니다.');
+    });
+  }
+}
+</script>
+</body>
+</html>
