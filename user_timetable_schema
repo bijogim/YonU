@@ -1,6 +1,12 @@
 CREATE TABLE user_timetable (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id INTEGER NOT NULL,
+    email VARCHAR(100) NOT NULL,
     subject_code VARCHAR(20) NOT NULL,
+    subject VARCHAR(100) NOT NULL,
+    day VARCHAR(10) NOT NULL,
+    period VARCHAR(20) NOT NULL,
+    professor VARCHAR(50) NOT NULL,
+    room VARCHAR(100) NOT NULL,
+    FOREIGN KEY (email) REFERENCES users(email),
     FOREIGN KEY (subject_code) REFERENCES subject_info(subject_code)
 );
