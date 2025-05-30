@@ -58,3 +58,10 @@ INSERT INTO Submenu (menu_id, name) VALUES
 (2, '학생회'),
 (2, 'FAQ'),
 (2, '관공서 링크');
+
+===================================
+# 새로 추가된 컬럼
+
+ALTER TABLE Post
+    ADD COLUMN like_count INT DEFAULT 0,
+    ADD COLUMN dislike_count INT DEFAULT 0;
