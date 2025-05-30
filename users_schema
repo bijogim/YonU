@@ -9,3 +9,7 @@ CREATE TABLE users (
     role TINYINT NOT NULL DEFAULT 1 COMMENT '0: 관리자, 1: 일반 유저',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '가입 시각'
 );
+
+
+ALTER TABLE users
+CHANGE COLUMN preferred_language language VARCHAR(20) DEFAULT 'ko' COMMENT '데이터가 저장된 언어 (ko, en, ja, zh)';
