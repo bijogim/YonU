@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -148,14 +149,20 @@
     </style>
 </head>
 <body>
-  <div id="nav-placeholder"></div>
-  <script>
-    fetch('nav.html')
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById('nav-placeholder').innerHTML = html;
-      });
-  </script>
+
+  <nav>
+    <div class="nav-left">
+      <a href="main.html"><img src="Logo.png" alt="YonU 로고" style="height: 45px;"></a>
+      <a href="board.html">게시판</a>
+      <a href="campus_life.html">학교 생활</a>
+      <a href="https://mirae.yonsei.ac.kr/wj/1415/subview.do" target="_blank">학교 공지</a>
+      <a href="timetable_loginver.html">시간표</a>
+    </div>
+    <div class="nav-right">
+      <a href="logout.html">로그아웃</a>
+      <a href="mypage.html" style="color: #6db2ff;">내 페이지</a>
+    </div>
+  </nav>
 
   <div id="logoutMessage" style="
     display: none;
@@ -172,7 +179,7 @@
     로그아웃 되었습니다.
   </div>
 
-    <div class="content">    // 벡엔드 연동 로직 건들지마요!!!!!!
+    <div class="content">   
         <div class="input-group">
             <label>게시판</label>
             <select id="boardSelect">
@@ -193,7 +200,7 @@
 
 <div class="input-group">
     <label>해시태그</label>
-    <input type="text" id="hashtags" placeholder="#예시 #해시태그를 #입력해주세요">
+    <input type="text" id="hashtags" placeholder="#태그1 #태그2 형식으로 입력해주세요">
 </div>
         <div class="input-group">
             <div class="toolbar">
@@ -218,93 +225,53 @@
             </div>
             <div class="editor" contenteditable="true" id="editor"></div>
             <div class="submit-button">
-                <button onclick="submitPost()">작성하기</button>
+                  <button id="submit-btn">작성하기</button>
             </div>
         </div>
     </div>
 
-    <script>   // 벡엔드 연동 로직 건들지마요!!!!!!
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'image/*';
-        fileInput.style.display = 'none';
-        document.body.appendChild(fileInput);
-
-        function insertImage() {
-            fileInput.click();
-            fileInput.onchange = function() {
-                const file = fileInput.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.style.maxWidth = '100%';
-                        document.execCommand('insertHTML', false, img.outerHTML);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            };
-        }
-
-        function insertLink() {
-            const url = prompt('링크 URL을 입력하세요:');
-            if (url) {
-                document.execCommand('createLink', false, url);
-            }
-        }
-
-        function changeFont(font) {
-            document.execCommand('fontName', false, font);
-            const editor = document.getElementById('editor');
-            const selection = window.getSelection();
-            if (selection.rangeCount > 0) {
-                const range = selection.getRangeAt(0);
-                const span = document.createElement('span');
-                span.style.fontFamily = font;
-                range.surroundContents(span);
-            }
-        }
-
-          function submitPost() {
-    const submenuId = document.getElementById("boardSelect").value;
-    const title = document.getElementById("postTitle").value;
-    const content = document.getElementById("editor").innerHTML;
+<script>
+document.getElementById('submit-btn').addEventListener('click', function() {
+    const submenuId = document.getElementById('boardSelect').value;
+    const title = document.getElementById('postTitle').value;
+    const content = document.getElementById('editor').innerHTML;
+    const hashtags = document.getElementById('hashtags').value;
+    const thumbnailFile = document.getElementById('thumbnailImage').files[0];
 
     if (!submenuId || !title || !content.trim()) {
         alert("게시판, 제목, 내용을 모두 입력해주세요.");
         return;
     }
 
-    const postData = {
-        submenuId: parseInt(submenuId),
-        title: title,
-        content: content,
-        author: "익명", // 실제 서비스에선 로그인 사용자명으로 바꿔야 합니다
-        viewCount: 0,
-        commentCount: 0
-    };
+    const formData = new FormData();
+    formData.append('submenuId', submenuId);
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('author', '익명');
+    formData.append('hashtags', hashtags);
+    if (thumbnailFile) {
+        formData.append('thumbnail', thumbnailFile);
+    }
 
-    fetch("http://localhost:8080/posts", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(postData)
+    fetch('http://localhost:8080/api/posts', {
+        method: 'POST',
+        body: formData
     })
     .then(response => {
         if (response.ok) {
-            alert("게시물이 성공적으로 등록되었습니다!");
-            window.location.href = "board_jhver.html"; // 작성 후 이동할 페이지
+            alert('게시글이 성공적으로 등록되었습니다!');
+            window.location.href = 'board.html'; // 성공 후 게시판 이동
         } else {
-            alert("등록에 실패했습니다.");
+            alert('게시글 등록에 실패했습니다.');
         }
     })
     .catch(error => {
-        console.error("게시글 등록 오류:", error);
-        alert("오류가 발생했습니다.");
+        console.error('게시글 등록 중 오류:', error);
+        alert('서버 오류가 발생했습니다.');
     });
-  }
-    </script>
+});
+</script>
 </body>
 </html>
+page.html
+board.html 표시 중입니다.

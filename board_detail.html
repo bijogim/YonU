@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자유게시판 | 게시글 상세보기</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    nav {
+      background-color: white;
+      border-bottom: 1px solid #ccc;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    nav a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+      font-size: 15px;
+    }
+    nav a.active {
+      color: #3a78c9;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+    }
+    h2 {
+      font-size: 20px;
+      margin-bottom: 25px;
+      color: #444;
+    }
+    .author-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .profile-img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background-color: #ccc;
+    }
+    .nickname {
+      font-weight: bold;
+    }
+    .time {
+      font-size: 12px;
+      color: #777;
+    }
+    .post-title {
+      font-size: 22px;
+      margin-bottom: 15px;
+    }
+    .post-content {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+    .reaction {
+      font-size: 14px;
+      color: #444;
+      margin-bottom: 25px;
+    }
+    .reaction button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      border: none;
+      background-color: #eee;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .reaction button.active {
+      background-color: #3a78c9;
+      color: white;
+    }
+    .comment-section {
+      border-top: 1px solid #ddd;
+      padding-top: 20px;
+    }
+    .comment {
+      margin-bottom: 20px;
+    }
+    .comment-author {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .comment-text {
+      margin-bottom: 4px;
+    }
+    .comment-time {
+      font-size: 12px;
+      color: #999;
+    }
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      resize: vertical;
+      font-size: 14px;
+    }
+    button.submit-comment {
+      margin-top: 10px;
+      padding: 10px 16px;
+      font-weight: bold;
+      border: none;
+      background-color: #333;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button.submit-comment:hover {
+      background-color: #555;
+    }
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    #confirmBox {
+      background-color: #eef2ff;
+      border: 1px solid #3a78c9;
+      padding: 20px 30px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    #confirmBox p {
+      margin-bottom: 15px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-left">
+      <a href="main.html"><img src="Logo.png" alt="YonU 로고" style="height: 45px;"></a>
+      <a href="board.html">게시판</a>
+      <a href="campus_life.html">학교 생활</a>
+      <a href="https://mirae.yonsei.ac.kr/wj/1415/subview.do" target="_blank">학교 공지</a>
+      <a href="timetable_loginver.html">시간표</a>
+    </div>
+    <div class="nav-right">
+      <a href="logout.html">로그아웃</a>
+      <a href="mypage.html" style="color: #6db2ff;">내 페이지</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+	<h2 id="board-name">학과게시판</h2> <!-- 게시판 이름 -->
+
+    <div class="author-info">
+      <div class="profile-img"></div>
+      <div>
+        <div class="nickname"></div>
+        <div class="time"></div>
+      </div>
+    </div>
+
+    <div class="post-title"></div>
+    <div class="post-content">
+    </div>
+
+    <div class="reaction">
+      <span id="like-count">👍 0</span>
+      <span id="dislike-count">👎 0</span>
+      <span id="comment-count">💬 0</span>
+      <button id="like-btn" onclick="toggleReaction('like')">좋아요</button>
+      <button id="dislike-btn" onclick="toggleReaction('dislike')">싫어요</button>
+    </div>
+
+    <div class="comment-section">
+      <h3>댓글</h3>
+      <textarea id="comment-box" rows="4" placeholder="댓글을 입력하세요."></textarea><br>
+      <button class="submit-comment" onclick="askBeforeSubmit()">등록</button>
+      <div id="comment-list">
+	<!-- 서버에서 불러온 댓글이 여기에 들어올거야 -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal">
+    <div id="confirmBox">
+      <p>댓글을 작성하시겠습니까?</p>
+      <button onclick="submitComment()">Yes</button>
+      <button onclick="cancelComment()">No</button>
+    </div>
+  </div>
+
+  <script>
+    let userReaction = null;
+    let likeCount = 1;
+    let dislikeCount = 0;
+    let commentCount = 1;
+
+    function updateReactionDisplay() {
+      document.getElementById("like-count").textContent = `👍 ${likeCount}`;
+      document.getElementById("dislike-count").textContent = `👎 ${dislikeCount}`;
+    }
+
+    function toggleReaction(type) {
+  const postId = new URLSearchParams(window.location.search).get('postId');
+
+  if (userReaction !== null) {
+    alert("이미 좋아요/싫어요를 눌렀습니다.");
+    return;
+  }
+
+  let url = '';
+  if (type === 'like') {
+    url = `http://localhost:8080/api/posts/${postId}/like`;
+  } else {
+    url = `http://localhost:8080/api/posts/${postId}/dislike`;
+  }
+
+  fetch(url, {
+    method: 'PATCH'
+  })
+  .then(response => {
+    if (!response.ok) throw new Error('좋아요/싫어요 실패');
+    return response.json(); // 🚨 서버가 진짜 JSON 리턴해야 해
+  })
+  .then(post => {
+    likeCount = post.likeCount;
+    dislikeCount = post.dislikeCount;
+    userReaction = type;
+    updateReactionDisplay();
+  })
+  .catch(error => {
+    console.error(error);
+    alert('좋아요/싫어요 중 오류 발생');
+  });
+}
+
+    function askBeforeSubmit() {
+      const commentBox = document.getElementById("comment-box");
+      if (commentBox.value.trim() === "") {
+        alert("댓글을 입력해주세요!");
+        return;
+      }
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    function cancelComment() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+   function submitComment() {
+  const commentBox = document.getElementById("comment-box");
+  const text = commentBox.value.trim();
+  if (text === "") {
+    alert("댓글을 입력해주세요!");
+    return;
+  }
+
+  const postId = new URLSearchParams(window.location.search).get('postId');
+
+  fetch('http://localhost:8080/comments', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    postId: Number(postId),
+    author: '익명',
+    content: text
+  })
+})
+.then(response => {
+  if (!response.ok) throw new Error('댓글 등록 실패');
+  return response.text(); 
+})
+.then(_ => {
+  alert('댓글이 등록되었습니다.');
+  commentBox.value = "";
+  document.getElementById("modal").style.display = "none";
+
+  loadComments(postId);  // 댓글 다시 불러오기
+})
+.catch(error => {
+  console.error(error);
+  alert('댓글 등록 중 오류가 발생했습니다.');
+});
+}
+
+//  글 상세 정보 가져오기
+window.onload = function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const postId = urlParams.get('postId');
+
+  if (!postId) {
+    alert('잘못된 접근입니다.');
+    window.location.href = 'board.html'; // 게시판 목록으로 리다이렉트
+    return;
+  }
+
+  // ✅ 조회수 먼저 1 증가시킨다!
+  fetch(`http://localhost:8080/api/posts/${postId}/view`, {
+    method: 'PATCH'
+  })
+  .then(response => {
+    if (!response.ok) throw new Error('조회수 증가 실패');
+    // 조회수 증가 성공했으면 -> 게시글 가져오기
+    return fetch(`http://localhost:8080/api/posts/id/${postId}`);
+  })
+  .then(response => {
+    if (!response.ok) throw new Error('게시글을 불러올 수 없습니다.');
+    return response.json();
+  })
+  .then(post => {
+    document.querySelector('.post-title').textContent = post.title;
+    document.querySelector('.post-content').innerHTML = post.content;
+    document.querySelector('.nickname').textContent = post.author;
+    document.querySelector('.time').textContent = new Date(post.createdAt).toLocaleString("ko-KR");
+
+    const boardNames = {
+      1: '장터게시판',
+      2: '자유게시판',
+      3: '새내기게시판',
+      4: '학과게시판'
+    };
+    const boardName = boardNames[post.submenuId] || '게시판';
+    document.getElementById('board-name').textContent = boardName;
+
+    likeCount = post.likeCount;
+    dislikeCount = post.dislikeCount;
+    updateReactionDisplay();
+
+    loadComments(post.postId);  // 댓글 불러오기 호출
+  })
+  .catch(error => {
+    console.error(error);
+    alert('게시글을 불러오기에 실패했습니다.');
+    window.location.href = 'board.html';
+  });
+}
+
+
+function loadComments(postId) {
+  fetch(`http://localhost:8080/comments?postId=${postId}`)
+    .then(response => {
+      if (!response.ok) throw new Error('댓글을 불러올 수 없습니다.');
+      return response.json();
+    })
+    .then(comments => {
+      const commentsSection = document.getElementById('comment-list');
+      commentsSection.innerHTML = ''; // 기존 댓글 다 지우고
+
+      comments.forEach(comment => {
+        const commentDiv = document.createElement('div');
+        commentDiv.className = 'comment';
+        commentDiv.innerHTML = `
+          <div class="comment-author">${comment.author}</div>
+          <div class="comment-text">${comment.content}</div>
+          <div class="comment-time">${new Date(comment.createdAt).toLocaleString("ko-KR")}</div>
+        `;
+        commentsSection.appendChild(commentDiv);
+      });
+
+      // 댓글 개수 업데이트
+      document.getElementById('comment-count').textContent = `💬 ${comments.length}`;
+    })
+    .catch(error => {
+      console.error(error);
+      alert('댓글 불러오기에 실패했습니다.');
+    });
+}
+
+  </script>
+</body>
+</html>
