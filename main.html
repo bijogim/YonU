@@ -213,6 +213,32 @@
   </footer>
 
   <script>
+    // 로그인 여부 확인 및 리디렉션
+    fetch('/api/user/check-login', {
+      credentials: 'include'
+    })
+    .then(res => {
+      if (res.status === 401) {
+        window.location.href = 'login.html';
+      } else {
+        return res.json();
+      }
+    })
+    .then(user => {
+      const lang = user.preferredLanguage || 'ko';
+      const apiUrl = lang === 'en' 
+        ? '/api/posts/translated/by-menu/1' 
+        : '/api/posts/by-menu/1';
+
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      })
+    })
+
     fetch('nav.html')
       .then(res => res.text())
       .then(html => {
