@@ -80,6 +80,18 @@
       color: #6db2ff;
       text-decoration: none;
     }
+
+    .language-select {
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid #6db2ff;
+      font-size: 0.85em;
+      background-color: white;
+      color: #0f5cb4;
+      font-weight: bold;
+      outline: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -97,11 +109,37 @@
   </form>
 
   <div class="extra-links">
-    <a href="find_id.html">아이디/비밀번호 찾기</a>
-    <a href="sign_up.html">회원가입</a>
-  </div>
+    <a href="/reset-password">비밀번호 찾기</a>
+    <a href="/sign_up">회원가입</a>
+    <select id="languageSelect" class="language-select">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="cn">中文</option>
+      <option value="jp">日本語</option>
+    </select>
+</div>
 
   <script>
+
+    document.getElementById("languageSelect").addEventListener("change", function() {
+    const selected = this.value;
+    switch (selected) {
+      case "en":
+        window.location.href = "login_en.html";
+        break;
+      case "jp":
+        window.location.href = "login_jp.html";
+        break;
+      case "cn":
+        window.location.href = "login_cn.html";
+        break;
+      case "ko":
+        window.location.href = "login.html";
+        break;
+      }
+    });
+    
+
     document.getElementById('loginForm').addEventListener('submit', async function (e) {
       e.preventDefault();
 

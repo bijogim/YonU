@@ -146,6 +146,8 @@
         width: 420px;
       }
     }
+
+
   </style>
 </head>
 <body>
@@ -153,12 +155,6 @@
   <h3>회원 정보를 입력해주세요</h3>
 
   <form id="signupForm">
-    <input type="email" id="email" placeholder="연세 이메일" required>
-    <input type="password" id="password" placeholder="비밀번호" required>
-    <input type="text" id="realName" placeholder="실명" required>
-    <input type="text" id="studentId" placeholder="학번" required>
-    <input type="text" id="department" placeholder="학과" required>
-    <input type="text" id="nickname" placeholder="닉네임" required>
 
     <select id="language" class="language-select" required>
       <option value="ko">한국어</option>
@@ -166,6 +162,13 @@
       <option value="jp">日本語</option>
       <option value="cn">中文</option>
     </select>
+
+    <input type="email" id="email" placeholder="연세 이메일" required>
+    <input type="password" id="password" placeholder="비밀번호" required>
+    <input type="text" id="realName" placeholder="실명" required>
+    <input type="text" id="studentId" placeholder="학번" required>
+    <input type="text" id="department" placeholder="학과" required>
+    <input type="text" id="nickname" placeholder="닉네임" required>
 
     <div class="checkbox">
       <input type="checkbox" id="terms" required>
@@ -197,7 +200,26 @@
   </div>
 
 <script>
-document.getElementById('signupForm').addEventListener('submit', function(event) {
+  // 언어 선택 시 페이지 이동
+  document.getElementById("language").addEventListener("change", function () {
+    const selected = this.value;
+    switch (selected) {
+      case "ko":
+        window.location.href = "sign_up.html";
+        break;
+      case "en":
+        window.location.href = "sign_up_en.html";
+        break;
+      case "jp":
+        window.location.href = "sign_up_jp.html";
+        break;
+      case "cn":
+        window.location.href = "sign_up_cn.html";
+        break;
+    }
+  });
+
+  document.getElementById('signupForm').addEventListener('submit', function(event) {
   event.preventDefault(); // 기본 제출 막기
 
   const email = document.getElementById('email').value;

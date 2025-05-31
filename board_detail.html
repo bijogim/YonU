@@ -155,19 +155,14 @@
   </style>
 </head>
 <body>
-  <nav>
-    <div class="nav-left">
-      <a href="main.html"><img src="Logo.png" alt="YonU 로고" style="height: 45px;"></a>
-      <a href="board.html">게시판</a>
-      <a href="campus_life.html">학교 생활</a>
-      <a href="https://mirae.yonsei.ac.kr/wj/1415/subview.do" target="_blank">학교 공지</a>
-      <a href="timetable_loginver.html">시간표</a>
-    </div>
-    <div class="nav-right">
-      <a href="logout.html">로그아웃</a>
-      <a href="mypage.html" style="color: #6db2ff;">내 페이지</a>
-    </div>
-  </nav>
+  <div id="nav-placeholder"></div>
+  <script>
+    fetch('nav.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('nav-placeholder').innerHTML = html;
+      });
+  </script>
 
   <div class="container">
 
