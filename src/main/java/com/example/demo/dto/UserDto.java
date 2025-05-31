@@ -16,5 +16,5 @@ public class UserDto {
     private String studentId;
     private String department;
     private String nickname;
-    private String preferredLanguage;
+    private String Language;
 }

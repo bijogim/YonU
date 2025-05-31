@@ -29,7 +29,7 @@ public class UserService {
         user.setStudentId(dto.getStudentId());
         user.setDepartment(dto.getDepartment());
         user.setNickname(dto.getNickname());
-        user.setPreferredLanguage(dto.getPreferredLanguage());
+        user.setLanguage(dto.getLanguage());
         user.setRole(1);
         userRepository.save(user);
     }

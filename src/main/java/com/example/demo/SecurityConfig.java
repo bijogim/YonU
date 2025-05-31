@@ -35,12 +35,14 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "api/login", "api/sign_up", "api/reset-password", "/main","/api/logged_in",
                                 "/api/posts/**",
+                                "api/posts",
                                 "/favicon.ico",
                                 "/css/**", "/js/**", "/images/**",
                                 "/api/timetable/save",       // ✅ 이거 추가해야 해
                                 "/api/timetable/my",
                                 "apu/mypage",
-                                "/comments"
+                                "/comments",
+                                "/uploads/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
