@@ -299,7 +299,8 @@
         location.href = `board_detail.html?postId=${post.postId}`;
       };
       div.innerHTML = `
-    <img class="board-thumb" src="${post.thumbnailUrl ? 'http://localhost:8080/api' + post.thumbnailUrl : 'https://via.placeholder.com/80'}" alt="썸네일" />
+    <img class="board-thumb" src="${post.thumbnailUrl ? 'http://localhost:8080' + post.thumbnailUrl : 'https://via.placeholder.com/80'}" alt="썸네일" />
+
     <div class="board-content">
       <div class="board-title">${post.title}</div>
       <div class="board-hashtags">${post.hashtags || ''}</div>

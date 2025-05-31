@@ -262,7 +262,8 @@ async function loadBoards() {
             <li>
               <img class="board-thumb" src="${post.thumbnailUrl ? 'http://localhost:8080' + post.thumbnailUrl : 'https://via.placeholder.com/50'}" alt="썸네일">
               <div class="board-text">
-                <div class="board-title-text">${post.title}
+                <div class="board-title-text">
+                   <a href="board_detail.html?postId=${post.postId}">${post.title}</a>
                   </div>
               </div>
               <div class="board-viewcount">조회수 ${post.viewCount}</div>
