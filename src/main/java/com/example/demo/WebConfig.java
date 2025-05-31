@@ -13,10 +13,13 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:5500","http://127.0.0.1:5500")  // 프론트 서버 주소
+                        .allowedOrigins("http://localhost:5500", "http://127.0.0.1:5500")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowCredentials(true);  // 세션 쿠키 주고받기 위해 필요
+                        .allowedHeaders("*")   // ✅ 이거 추가
+                        .allowCredentials(true);
             }
         };
     }
 }
+
+

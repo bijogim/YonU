@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
@@ -20,6 +21,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = {"http://localhost:5500", "http://127.0.0.1:5500"}, allowCredentials = "true")
 public class UserController {
 
     @Autowired
@@ -41,7 +43,6 @@ public class UserController {
         boolean result = userService.login(dto);
 
         if (result) {
-            // ✅ 로그인된 사용자 정보 조회
             User user = userService.findByEmail(dto.getEmail());
 
             // ✅ 세션에 사용자 정보 저장
@@ -61,6 +62,10 @@ public class UserController {
                             List.of(new SimpleGrantedAuthority("ROLE_USER"))
                     );
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // ✅ [추가] 세션에 SecurityContext 저장
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                    SecurityContextHolder.getContext());
 
             return ResponseEntity.ok("로그인 성공");
         } else {

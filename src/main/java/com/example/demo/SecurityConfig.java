@@ -33,13 +33,14 @@ public class SecurityConfig {
                 // ✅ URL 접근 권한 설정
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/login", "/sign_up", "/reset-password", "/main","/api/logged_in",
-                                "/api/**",
+                                "api/login", "api/sign_up", "api/reset-password", "/main","/api/logged_in",
+                                "/api/posts/**",
                                 "/favicon.ico",
                                 "/css/**", "/js/**", "/images/**",
                                 "/api/timetable/save",       // ✅ 이거 추가해야 해
                                 "/api/timetable/my",
-                                "mypage"
+                                "apu/mypage",
+                                "/comments"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

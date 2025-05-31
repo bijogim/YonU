@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "Post")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,28 +15,36 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int postId;
+    private Long postId;
 
-    private int submenuId;
+    private Integer submenuId;
 
     private String title;
 
+    // ✅ 긴 글 저장용: MEDIUMTEXT 사용
     @Column(columnDefinition = "MEDIUMTEXT")
     private String content;
 
     private String author;
 
+    private String thumbnailUrl;
+
+    private String hashtags;
+
+    private Integer commentCount = 0;
+
+    private Integer viewCount = 0;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
-    private int commentCount;
+    // ✅ 좋아요, 싫어요 추가
+    @Column(nullable = false)
+    private Integer likeCount = 0;
 
-    private int viewCount;
-
-    private String thumbnailUrl;
-
-    private String hashtags;
+    @Column(nullable = false)
+    private Integer dislikeCount = 0;
 
     @PrePersist
     protected void onCreate() {
@@ -46,5 +55,10 @@ public class Post {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    // ✅ 뷰 카운트 세터
+    public void setViewCount(Integer viewCount) {
+        this.viewCount = viewCount;
     }
 }

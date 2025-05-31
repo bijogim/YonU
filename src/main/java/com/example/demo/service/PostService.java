@@ -1,39 +1,34 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.Post;
-import com.example.demo.domain.Submenu;
-import com.example.demo.dto.SubmenuPostDto;
 import com.example.demo.dto.SubmenuWithPostsDto;
-import com.example.demo.repository.PostRepository;
-import com.example.demo.repository.SubmenuRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
-@Service
-public class PostService {
+public interface PostService {
 
-    @Autowired
-    private PostRepository postRepository;
+    List<SubmenuWithPostsDto> getRecentPostsByMenuId(int menuId);
 
-    @Autowired
-    private SubmenuRepository submenuRepository;
+    List<Post> getAllPosts();
 
-    public List<SubmenuWithPostsDto> getRecentPostsByMenuId(int menuId) {
-        List<Submenu> submenus = submenuRepository.findByMenuId(menuId);
-        List<SubmenuWithPostsDto> result = new ArrayList<>();
+    Optional<Post> getPostById(Long id);
 
-        for (Submenu submenu : submenus) {
-            List<Post> posts = postRepository.findTop3BySubmenuIdOrderByCreatedAtDesc(submenu.getSubmenuId());
+    Post createPost(Post post);
 
-            List<SubmenuPostDto> postDtos = posts.stream()
-                    .map(p -> new SubmenuPostDto(p.getTitle(), p.getViewCount()))
-                    .toList();
+    void deletePost(Long id);
 
-            result.add(new SubmenuWithPostsDto(submenu.getName(), postDtos));
-        }
+    List<Post> getPostsBySubmenuId(Integer submenuId);
 
-        return result;
-    }
+    Page<Post> getPagedPosts(Pageable pageable);
+
+    Post getPostAndIncreaseView(Long id);
+
+    void incrementViewCount(Long id);
+
+    Post savePost(Post post);
+
+    Page<Post> getPosts(Pageable pageable, Integer submenuId);
 }
