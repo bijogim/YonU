@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Find Password</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    h2 {
+      margin-top: 100px;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+
+    input[type="email"] {
+      width: 400px;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .find-btn {
+      background-color: #6db2ff;
+      color: white;
+      border: none;
+      padding: 9px;
+      width: 425px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: button;
+    }
+
+    .find-btn:hover {
+      background-color: #589ee5;
+    }
+
+    .back-link {
+      margin-top: 20px;
+      font-size: 0.9em;
+    }
+
+    .back-link a {
+      color: #6db2ff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Find Password</h2>
+
+  <form id="reset-form" class="form-group">
+    <input type="email" id="email" placeholder="Please enter your Yonsei email" required>
+    <button type="submit" class="find-btn">Find Password</button>
+  </form>
+
+  <div class="back-link">
+    <a href="login.html">Back to Login Page</a>
+  </div>
+
+  <script>
+    document.getElementById('reset-form').addEventListener('submit', function (e) {
+      e.preventDefault(); // Prevent default form behavior
+
+      const email = document.getElementById('email').value;
+
+      fetch('/reset-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('A password reset link has been sent to your email.');
+        } else {
+          alert('There was a problem processing your request.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while communicating with the server.');
+      });
+    });
+  </script>
+
+</body>
+</html>

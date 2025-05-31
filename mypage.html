@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YonU 내 페이지</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    a {
+      color: black;
+      text-decoration: none;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Arial', sans-serif;
+      background-color: #ffffff;
+    }
+
+    .page-wrapper {
+      flex: 1;
+    }
+
+    nav {
+      background-color: white;
+      border-bottom: 1px solid #ccc;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+      transform: translateX(100px); /* 오른쪽으로 이동 */
+    }
+
+    .mypage-title {
+      font-size: 26px;
+      font-weight: bold;
+      margin-top: 50px;
+      margin-left: 50px;
+      margin-bottom: 20px;
+    }
+
+    .mypage-wrapper {
+      display: flex;
+      gap: 60px;
+      background-color: rgb(255, 255, 255);
+      padding: 50px 50px 60px 50px;
+      border-radius: 8px;
+    }
+
+    .profile-photo {
+      width: 300px;
+      height: 300px;
+      border-radius: 2%;
+      background-color: #ddd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #666;
+      font-size: 18px;
+    }
+
+    .photo-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .file-upload-form {
+      position: absolute;
+      left: 5px;
+      bottom: -35px;
+    }
+
+    .custom-file-upload {
+      background: none;
+      color: #6db2ff;
+      font-size: 14px;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0;
+      margin: 0;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .info-section {
+      flex-grow: 1;
+      margin-top: 3px;
+    }
+
+    .info-section h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      margin-left: -5px;
+    }
+
+    .info-section p {
+      margin: 16px 0;
+      font-size: 16px;
+    }
+
+    select {
+      padding: 6px 10px;
+      font-size: 14px;
+      margin-top: 15px;
+      background-color: #eee;
+      border: none;
+      border-radius: 4px;
+    }
+
+    .toggle-container {
+      margin-top: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .toggle-label {
+      display: inline-block;
+      margin-right: 10px;
+      font-size: 16px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background-color: #ccc;
+      border-radius: 34px;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: .4s;
+    }
+
+    .toggle-switch input:checked + .slider {
+      background-color: #6db2ff;
+    }
+
+    .toggle-switch input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    footer {
+      background-color: #6db2ff;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: auto;
+    }
+
+    /* ✅ 미디어 쿼리 */
+    @media (max-width: 1024px) {
+      .container {
+        transform: none;
+        padding: 0 30px;
+      }
+
+      .profile-photo {
+        width: 220px;
+        height: 220px;
+      }
+
+      .mypage-title {
+        margin-left: 20px;
+        font-size: 22px;
+      }
+
+      .info-section h2 {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .container {
+        transform: none;
+        padding: 0 15px;
+      }
+
+      .mypage-wrapper {
+        flex-direction: column;
+        align-items: center;
+        padding: 30px 20px;
+      }
+
+      .profile-photo {
+        width: 160px;
+        height: 160px;
+        font-size: 14px;
+      }
+
+      .mypage-title {
+        font-size: 20px;
+        margin-left: 10px;
+        text-align: center;
+      }
+
+      .info-section h2 {
+        font-size: 18px;
+      }
+
+      .info-section p {
+        font-size: 14px;
+      }
+
+      .file-upload-form {
+        bottom: -28px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="nav-placeholder"></div>
+  <script>
+    fetch('nav.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('nav-placeholder').innerHTML = html;
+      });
+  </script>
+
+  <!-- 본문 wrapper 추가 -->
+  <div class="page-wrapper">
+    <div class="container">
+      <div class="mypage-title">내 페이지</div>
+      <div class="mypage-wrapper">
+
+        <!-- 프로필 사진 -->
+        <div class="photo-section">
+          <div class="profile-photo">개인 사진</div>
+          <form class="file-upload-form" method="POST" action="/upload" enctype="multipart/form-data">
+            <label for="file-upload" class="custom-file-upload">
+              사진 수정하기
+            </label>
+            <input id="file-upload" name="photo" type="file" accept=".jpg,.jpeg,.png" />
+          </form>
+        </div>
+
+        <!-- 사용자 정보 -->
+        <div class="info-section">
+          <h2>이름 / 닉네임</h2>
+          <p>학과 / 재학 여부</p>
+          <p>아이디</p>
+
+          <p>
+            설정 언어<br/>
+            <select name="language">
+              <option value="ko">한국어</option>
+              <option value="en">English</option>
+              <option value="zh">中文</option>
+              <!-- 필요 시 다른 언어도 추가 가능 -->
+            </select>
+          </p>
+
+          <div class="toggle-container">
+            <span class="toggle-label">자동 번역</span>
+            <label class="toggle-switch">
+              <input type="checkbox" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 푸터 -->
+  <footer>
+    ⓒ 2025 YonU | 연세대학교 유학생 커뮤니티
+  </footer>
+
+</body>
+</html>

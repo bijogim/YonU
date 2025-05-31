@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>로그아웃 중...</title>
+  <script>
+    window.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const res = await fetch("/logout", {
+          method: "GET",
+          credentials: "same-origin"
+        });
+
+        if (res.ok) {
+          alert("👋 로그아웃 되었습니다.");
+          window.location.href = "/login.html"; // 로그인 페이지로 이동
+        } else {
+          alert("❌ 로그아웃 실패");
+          window.location.href = "/main.html"; // 실패 시 다시 메인
+        }
+      } catch (err) {
+        console.error("서버 오류:", err);
+        alert("⚠️ 서버 연결 실패");
+        window.location.href = "/main.html";
+      }
+    });
+  </script>
+</head>
+<body>
+  <p style="text-align:center; margin-top: 100px;">로그아웃 처리 중입니다...</p>
+</body>
+</html>

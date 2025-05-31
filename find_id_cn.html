@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>找回密码</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    h2 {
+      margin-top: 100px;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+
+    input[type="email"] {
+      width: 400px;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .find-btn {
+      background-color: #6db2ff;
+      color: white;
+      border: none;
+      padding: 9px;
+      width: 425px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .find-btn:hover {
+      background-color: #589ee5;
+    }
+
+    .back-link {
+      margin-top: 20px;
+      font-size: 0.9em;
+    }
+
+    .back-link a {
+      color: #6db2ff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>找回密码</h2>
+
+  <form id="reset-form" class="form-group">
+    <input type="email" id="email" placeholder="请输入您的延世大学邮箱" required>
+    <button type="submit" class="find-btn">找回密码</button>
+  </form>
+
+  <div class="back-link">
+    <a href="login.html">返回登录页</a>
+  </div>
+
+  <script>
+    document.getElementById('reset-form').addEventListener('submit', function (e) {
+      e.preventDefault(); // 阻止默认表单行为
+
+      const email = document.getElementById('email').value;
+
+      fetch('/reset-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('密码重置链接已发送至您的邮箱。');
+        } else {
+          alert('处理请求时出现问题。');
+        }
+      })
+      .catch(error => {
+        console.error('错误:', error);
+        alert('与服务器通信时发生错误。');
+      });
+    });
+  </script>
+
+</body>
+</html>

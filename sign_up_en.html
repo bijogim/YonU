@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YonU Sign Up</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: white;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    h3 {
+      margin: 30px 0 40px 0;
+      font-size: 22px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    .signup-btn,
+    select {
+      padding: 10.5px;
+      margin-bottom: 35px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 15px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 30px 0;
+      font-size: 14px;
+    }
+
+    .checkbox input {
+      margin-right: 10px;
+    }
+
+    .signup-btn {
+      background-color: #6db2ff;
+      color: white;
+      border: none;
+      transition: background-color 0.5s;
+      cursor: pointer;
+    }
+
+    .signup-btn:hover {
+      background-color: #2145a9;
+    }
+
+    /* Popup style */
+    #modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0,0,0,0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    #modal:target {
+      display: flex;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      padding: 20px 30px;
+      border-radius: 8px;
+      width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 20px;
+      text-decoration: none;
+      color: #aaa;
+      font-weight: bold;
+      transition: color 0.25s;
+    }
+
+    .modal-close:hover {
+      color: black;
+    }
+
+    .terms-link {
+      font-size: 12px;
+      color: #3160e2;
+      text-decoration: underline;
+      margin-left: 10px;
+    }
+
+    /* ✅ Fixed px size by media query */
+
+    /* Mobile (up to 600px) */
+    @media (max-width: 600px) {
+      input[type="text"],
+      input[type="password"],
+      input[type="email"],
+      .signup-btn,
+      select {
+        width: 280px;
+      }
+
+      .language-select {
+        width: 300px;  /* 20px wider for language select */
+      }
+    }
+
+    /* Tablet (601px ~ 1024px) */
+    @media (min-width: 601px) and (max-width: 1024px) {
+      input[type="text"],
+      input[type="password"],
+      input[type="email"],
+      .signup-btn,
+      select {
+        width: 340px;
+      }
+
+      .language-select {
+        width: 360px;  /* 20px wider for language select */
+      }
+    }
+
+    /* PC (1025px and above) */
+    @media (min-width: 1025px) {
+      input[type="text"],
+      input[type="password"],
+      input[type="email"],
+      .signup-btn,
+      select {
+        width: 400px;
+      }
+
+      .language-select {
+        width: 420px;  /* 20px wider for language select */
+      }
+    }
+  </style>
+</head>
+<body>
+  <h3>Please enter your information</h3>
+
+  <!-- Language dropdown -->
+  <select id="language" class="language-select" required>
+    <option value="en">English</option>
+    <option value="ko">한국어</option>
+    <option value="jp">日本語</option>
+    <option value="cn">中文</option>
+  </select>
+
+  <form action="/submit" method="POST">
+    <input type="email" id="email" placeholder="Yonsei Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <input type="text" id="realName" placeholder="Real Name" required>
+    <input type="text" id="studentId" placeholder="Student ID" required>
+    <input type="text" id="department" placeholder="Department" required>
+    <input type="text" id="nickname" placeholder="Nickname" required>
+
+
+
+    <div class="checkbox">
+      <input type="checkbox" id="terms" required>
+      <label for="terms">Agree to terms of service and privacy policy</label>
+      <a href="#modal" class="terms-link">[View Terms]</a>
+    </div>
+
+    <button type="submit" class="signup-btn">Sign Up</button>
+  </form>
+
+  <!-- Back to login link -->
+  <div style="margin-top: 20px; margin-bottom: 40px; font-size: 0.9em;">
+    <a href="login.html" style="color: #3160e2; text-decoration: none;">Back to Login</a>
+  </div>
+
+  <!-- Modal popup -->
+  <div id="modal">
+    <div class="modal-content">
+      <a href="#" class="modal-close">&times;</a>
+      <h4>Terms of Service and Privacy Policy</h4>
+      <p style="font-size: 13px; text-align: left;">
+        YonU is a service for Yonsei University students. By signing up, you agree to the following terms:
+        <br><br>
+        ● Collected information: Name, student ID, department, Yonsei email, nickname, etc.<br>
+        ● Purpose of use: Community operation, authentication, timetable sharing, etc.<br>
+        ● Retention period: Immediately deleted upon withdrawal<br>
+        ● For other details, please refer to our privacy policy<br><br>
+        These terms may be modified for service improvement or policy changes, and you will be notified via announcements.
+      </p>
+    </div>
+  </div>
+  <script>
+    // 언어 선택 시 페이지 이동
+    document.getElementById("language").addEventListener("change", function () {
+      const selected = this.value;
+      switch (selected) {
+        case "ko":
+          window.location.href = "sign_up.html";
+          break;
+        case "en":
+          window.location.href = "sign_up_en.html";
+          break;
+        case "jp":
+          window.location.href = "sign_up_jp.html";
+          break;
+        case "cn":
+          window.location.href = "sign_up_cn.html";
+          break;
+      }
+    });
+
+    document.querySelector('form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const name = document.getElementById("realName").value.trim();
+      const studentId = document.getElementById("studentId").value.trim();
+      const department = document.getElementById("department").value.trim();
+      const nickname = document.getElementById("nickname").value.trim();
+      const preferredLanguage = document.getElementById("language").value;
+      const termsChecked = document.getElementById("terms").checked;
+
+      if (!termsChecked) {
+        alert("📌 You must agree to the terms to sign up.");
+        return;
+      }
+
+      if (!email || !password || !name || !studentId || !department || !nickname) {
+        alert("Please fill in all information.");
+        return;
+      }
+
+      const userDto = {
+        email,
+        password,
+        name,
+        studentId,
+        department,
+        nickname,
+        preferredLanguage
+      };
+
+      try {
+        const response = await fetch("/api/sign_up", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(userDto)
+        });
+
+        const result = await response.text();
+
+        if (response.ok) {
+          alert("🎉 Sign up successful! Redirecting to login page.");
+          window.location.href = "/login";
+        } else {
+          alert("❌ Sign up failed: " + result);
+        }
+      } catch (error) {
+        console.error("Server communication error:", error);
+        alert("⚠️ An error occurred while connecting to the server.");
+      }
+    });
+  </script>
+
+</body>
+</html>

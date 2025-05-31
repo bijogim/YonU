@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>投稿作成 | 掲示板</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    nav {
+      background-color: white;
+      border-bottom: 1px solid #ccc;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    nav a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+      font-size: 15px;
+    }
+    nav a.active {
+      color: #3a78c9;
+    }
+    .form-container {
+      max-width: 800px;
+      margin: 40px auto 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    .form-group input[type="text"],
+    .form-group select,
+    .form-group textarea,
+    .form-group input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .form-group textarea {
+      height: 200px;
+      resize: vertical;
+    }
+    .submit-btn {
+      background-color: #3a78c9;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .submit-btn:hover {
+      background-color: #2c5ca3;
+    }
+  </style>
+</head>
+<body>
+  <div id="nav-placeholder"></div>
+  <script>
+    fetch('nav_jp.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('nav-placeholder').innerHTML = html;
+      });
+  </script>
+
+  <div class="form-container">
+    <h2>投稿作成</h2>
+    <div class="form-group">
+      <label for="board">掲示板選択</label>
+      <select id="board">
+        <option value="0">掲示板を選択してください</option>
+        <option value="1">学校からのお知らせ</option>
+        <option value="2">学校生活</option>
+        <option value="3">FAQ</option>
+        <option value="4">提案リンク</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="title">タイトル</label>
+      <input type="text" id="title" placeholder="タイトルを入力してください">
+    </div>
+
+    <div class="form-group">
+      <label for="content">本文</label>
+      <textarea id="content" placeholder="内容を入力してください"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="file">添付ファイル</label>
+      <input type="file" id="file">
+    </div>
+
+    <button class="submit-btn" onclick="submitPost()">投稿</button>
+  </div>
+
+<script>
+function submitPost() {
+  const board = document.getElementById("board").value;
+  const title = document.getElementById("title").value.trim();
+  const content = document.getElementById("content").value.trim();
+  const fileInput = document.getElementById("file");
+  const file = fileInput.files[0];
+
+  const allowedExtensions = ["jpg", "jpeg", "png", "pdf", "doc", "docx"];
+  const maxFileSize = 5 * 1024 * 1024; // 5MB
+
+  let isValid = true;
+
+  if (!title || !content) isValid = false;
+  if (board === "0") isValid = false;
+
+  // ファイルが添付されている場合のみ検証
+  if (file) {
+    if (file.size > maxFileSize) {
+      isValid = false;
+    } else {
+      const ext = file.name.split(".").pop().toLowerCase();
+      if (!allowedExtensions.includes(ext)) isValid = false;
+    }
+  }
+
+  if (isValid) {
+    alert("投稿が作成されました。");
+  } else {
+    alert("タイトル、本文、掲示板選択をご確認ください。");
+  }
+}
+</script>
+
+</body>
+</html>

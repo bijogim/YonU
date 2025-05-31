@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <style>
+      * { box-sizing: border-box; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background-color: white;
+      border-bottom: 1px solid #ccc;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    nav a.active {
+      color: #3a78c9;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .banner {
+      height: 150px;
+      background-color: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+        .post {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .post img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+        .post-content {
+            flex-grow: 1;
+        }
+        .post-content a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        .post-meta {
+            color: #777;
+            font-size: 0.9em;
+        }
+        .no-thumbnail {
+            background: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .pagination a {
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            color: #333;
+        }
+        .pagination a.active {
+            background-color: #0056b3;
+            color: #fff;
+            border-color: #0056b3;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        
+    </style>
+</head>
+<body>
+ 
+  <div id="nav-placeholder"></div>
+  <script>
+    fetch('nav.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('nav-placeholder').innerHTML = html;
+      });
+  </script>
+
+  <div class="container">
+    <div class="banner">광고 또는 배너 영역</div>
+
+    <nav>
+        <a href="#school-notice" class="nav-link">학교 공지</a>
+        <a href="#school-life" class="nav-link active">학교생활</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+        <a href="#suggestion" class="nav-link">관공서 링크</a>
+    </nav>
+
+    <div class="container">
+        <div id="school-life" class="section active">
+            <div class="post">
+                <img src="https://via.placeholder.com/50" alt="썸네일">
+                <div class="post-content">
+                    <a href="school.html">학교생활 게시글 465번 (submenu 7)</a>
+                    <div class="post-meta">
+                        유저7-6 | #학교생활 #submenu7 | 2025. 5. 24. 오후 7:11 | 조회수: 0 | 댓글수: 0
+                    </div>
+                </div>
+            </div>
+            <div class="post">
+                <img src="https://via.placeholder.com/50" alt="썸네일">
+                <div class="post-content">
+                    <a href="#">학교생활 게시글 10번 (submenu 7)</a>
+                    <div class="post-meta">
+                        유저7-2 | #학교생활 #submenu7 | 2025. 5. 24. 오후 7:10 | 조회수: 0 | 댓글수: 0
+                    </div>
+                </div>
+            </div>
+            <div class="post">
+                <img src="https://via.placeholder.com/50" alt="썸네일">
+                <div class="post-content">
+                    <a href="#">학교생활 게시글 9번 (submenu 7)</a>
+                    <div class="post-meta">
+                        유저7-9 | #학교생활 #submenu7 | 2025. 5. 24. 오후 7:09 | 조회수: 0 | 댓글수: 0
+                    </div>
+                </div>
+            </div>
+            <div class="post">
+                <img src="https://via.placeholder.com/50" alt="썸네일">
+                <div class="post-content">
+                    <a href="#">학교생활 게시글 8번 (submenu 7)</a>
+                    <div class="post-meta">
+                        유저7-8 | #학교생활 #submenu7 | 2025. 5. 24. 오후 7:08 | 조회수: 0 | 댓글수: 0
+                    </div>
+                </div>
+            </div>
+            <div class="post">
+                <img src="https://via.placeholder.com/50" alt="썸네일">
+                <div class="post-content">
+                    <a href="#">학교생활 게시글 7번 (submenu 7)</a>
+                    <div class="post-meta">
+                        유저7-7 | #학교생활 #submenu7 | 2025. 5. 24. 오후 7:07 | 조회수: 0 | 댓글수: 0
+                    </div>
+                </div>
+            </div>
+            <div class="post">
+                <img src="https://via.placeholder.com/50" alt="썸네일">
+                <div class="post-content">
+                    <a href="#">학교생활 게시글 6번 (submenu 7)</a>
+                    <div class="post-meta">
+                        유저7-6 | #학교생활 #submenu7 | 2025. 5. 24. 오후 7:06 | 조회수: 0 | 댓글수: 0
+                    </div>
+                </div>
+            </div>
+            <div class="post">
+                <img src="https://via.placeholder.com/50" alt="썸네일">
+                <div class="post-content">
+                    <a href="#">학교생활 게시글 5번 (submenu 7)</a>
+                    <div class="post-meta">
+                        유저7-5 | #학교생활 #submenu7 | 2025. 5. 24. 오후 7:05 | 조회수: 0 | 댓글수: 0
+                    </div>
+                </div>
+            </div>
+            <div class="post">
+                <img src="https://via.placeholder.com/50" alt="썸네일">
+                <div class="post-content">
+                    <a href="#">학교생활 게시글 4번 (submenu 7)</a>
+                    <div class="post-meta">
+                        유저7-4 | #학교생활 #submenu7 | 2025. 5. 24. 오후 7:04 | 조회수: 0 | 댓글수: 0
+                    </div>
+                </div>
+            </div>
+            <div class="post">
+                <img src="https://via.placeholder.com/50" alt="썸네일">
+                <div class="post-content">
+                    <a href="#">학교생활 게시글 3번 (submenu 7)</a>
+                    <div class="post-meta">
+                        유저7-3 | #학교생활 #submenu7 | 2025. 5. 24. 오후 7:03 | 조회수: 0 | 댓글수: 0
+                    </div>
+                </div>
+            </div>
+            <div class="pagination">
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+            </div>
+        </div>
+
+        <div id="school-notice" class="section">
+            <div class="post">
+                <img src="https://via.placeholder.com/50" alt="썸네일">
+                <div class="post-content">
+                    <a href="#">학교 공지 게시글 1번 (submenu 1)</a>
+                    <div class="post-meta">
+                        유저1-1 | #학교공지 #submenu1 | 2025. 5. 24. 오후 7:11 | 조회수: 0 | 댓글수: 0
+                    </div>
+                </div>
+            </div>
+            <div class="post">
+                <img src="https://via.placeholder.com/50" alt="썸네일">
+                <div class="post-content">
+                    <a href="#">학교 공지 게시글 2번 (submenu 1)</a>
+                    <div class="post-meta">
+                        유저1-2 | #학교공지 #submenu1 | 2025. 5. 24. 오후 7:10 | 조회수: 0 | 댓글수: 0
+                    </div>
+                </div>
+            </div>
+            <div class="pagination">
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+            </div>
+        </div>
+
+        <div id="faq" class="section">
+            <div class="no-thumbnail">
+                <a href="#">FAQ 게시글 1번 (submenu 3)</a>
+                <div class="post-meta">
+                    유저3-1 | #FAQ #submenu3 | 2025. 5. 24. 오후 7:11 | 조회수: 0 | 댓글수: 0
+                </div>
+            </div>
+            <div class="no-thumbnail">
+                <a href="#">FAQ 게시글 2번 (submenu 3)</a>
+                <div class="post-meta">
+                    유저3-2 | #FAQ #submenu3 | 2025. 5. 24. 오후 7:10 | 조회수: 0 | 댓글수: 0
+                </div>
+            </div>
+            <div class="pagination">
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+            </div>
+        </div>
+
+        <div id="suggestion" class="section">
+            <div class="no-thumbnail">
+                <a href="#">관공서 링크 게시글 1번 (submenu 4)</a>
+                <div class="post-meta">
+                    유저4-1 | #관공서 링크 #submenu4 | 2025. 5. 24. 오후 7:11 | 조회수: 0 | 댓글수: 0
+                </div>
+            </div>
+            <div class="no-thumbnail">
+                <a href="#">관공서 링크 게시글 2번 (submenu 4)</a>
+                <div class="post-meta">
+                    유저4-2 | #관공서 링크 #submenu4 | 2025. 5. 24. 오후 7:10 | 조회수: 0 | 댓글수: 0
+                </div>
+            </div>
+            <div class="pagination">
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+            </div>
+        </div>
+    </div>
+
+<button class="write-btn" onclick="location.href='campus_page.html'">글쓰기</button>
+
+    <script>
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.section');
+        const currentLocation = document.getElementById('current-location');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                const sectionId = this.getAttribute('href').substring(1);
+                sections.forEach(section => section.classList.remove('active'));
+                document.getElementById(sectionId).classList.add('active');
+                currentLocation.textContent = `현재 위치: ${this.textContent}`;
+            });
+        });
+    </script>
+</body>
+</html>
