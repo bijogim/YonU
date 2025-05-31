@@ -5,19 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>YonU 메인화면</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-    a {
-      color: black;
-      text-decoration: none;
-    }
+    * { box-sizing: border-box; }
+    a { color: black; text-decoration: none; }
     html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
+      height: 100%; margin: 0; padding: 0;
+      display: flex; flex-direction: column;
       font-family: 'Arial', sans-serif;
       background-color: #f5f5f5;
     }
@@ -40,14 +32,11 @@
       font-weight: bold;
       font-size: 15px;
     }
-    main {
-      flex: 1;
-    }
+    main { flex: 1; }
     .container {
       max-width: 1100px;
       margin: 30px auto;
-      padding: 0 20px;
-      padding-bottom: 80px;
+      padding: 0 20px 80px;
     }
     .section {
       background-color: white;
@@ -55,16 +44,11 @@
       padding: 20px;
       margin-bottom: 30px;
     }
-    .section h2 {
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
+    .section h2 { font-size: 18px; margin-bottom: 10px; }
     .calendar {
       background-color: #e7f1ff;
       height: 265.5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       color: #3a78c9;
       font-weight: bold;
       border-radius: 4px;
@@ -97,9 +81,7 @@
       border-bottom: 1px solid #eee;
       min-height: 60px;
     }
-    .board-item li:last-child {
-      border-bottom: none;
-    }
+    .board-item li:last-child { border-bottom: none; }
     .board-thumb {
       width: 50px;
       height: 50px;
@@ -107,10 +89,7 @@
       border-radius: 4px;
       margin-right: 12px;
     }
-    .board-text {
-      flex-grow: 1;
-      overflow: hidden;
-    }
+    .board-text { flex-grow: 1; overflow: hidden; }
     .board-title-text {
       font-weight: bold;
       white-space: nowrap;
@@ -150,59 +129,113 @@
       width: 100%;
     }
     @media (max-width: 768px) {
-      .board-grid {
-        grid-template-columns: 1fr;
-      }
+      .board-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <div id="nav-placeholder"></div>
-  <script>
-    fetch('nav.html')
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById('nav-placeholder').innerHTML = html;
-      });
-  </script>
-
+<div id="nav-placeholder"></div>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  fetch('http://localhost:8080/api/logged_in', {
-    method: 'GET',
-    credentials: 'include'
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('로그인 안됨');
-      }
-      return response.json();
-    })
-    .then(user => {
-      const navRight = document.getElementById('navRight');
-      navRight.innerHTML = `
-        <span>
-          ${user.nickname}님
-          <a href="#" class="nav-btn" id="logoutBtn">로그아웃</a>
-        </span>
-      `;
-      document.getElementById('logoutBtn').addEventListener('click', () => {
-        fetch('http://localhost:8080/api/logout', {
-          method: 'POST',
-          credentials: 'include'
-        })
-        .then(() => {
-          alert('로그아웃 되었습니다.');
-          window.location.href = 'login.html';
-        })
-        .catch(err => console.error('로그아웃 실패:', err));
-      });
-    })
-    .catch(err => {
-      console.log('🚫 로그인 안된 사용자입니다.', err);
+  fetch('nav.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('nav-placeholder').innerHTML = html;
     });
-});
+</script>
+
+<script type="module">
+  import { checkLoginAndRedirect } from './auth.js';
+
+  const boardMap = {
+    1: { title: "장터 게시판", link: "board.html?submenuId=1" },
+    2: { title: "자유 게시판", link: "board.html?submenuId=2" },
+    3: { title: "새내기 게시판", link: "board.html?submenuId=3" },
+    4: { title: "학과 게시판", link: "board.html?submenuId=4" }
+  };
+
+  checkLoginAndRedirect(user => {
+    const lang = user.lang || 'ko';
+    
+    const navInterval = setInterval(() => {
+      const navRight = document.getElementById('navRight');
+      if (navRight) {
+        clearInterval(navInterval);
+        navRight.innerHTML = `
+          <span>
+            ${user.nickname}님
+            <a href="#" class="nav-btn" id="logoutBtn">로그아웃</a>
+          </span>
+        `;
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+          fetch('http://localhost:8080/api/logout', {
+            method: 'POST',
+            credentials: 'include'
+          }).then(() => {
+            alert('로그아웃 되었습니다.');
+            window.location.href = 'login.html';
+          });
+        });
+      }
+    }, 100);
+
+    loadBoards(lang);
+  });
+
+  async function loadBoards(lang = 'ko') {
+    const container = document.getElementById('boardContainer');
+    container.innerHTML = '';
+
+    for (const submenuId in boardMap) {
+      const board = boardMap[submenuId];
+      const boardItem = document.createElement('div');
+      boardItem.className = 'board-item';
+
+      let boardHtml = `
+        <h2><a href="${board.link}">${board.title}</a></h2>
+        <ul>
+      `;
+
+      try {
+        const res = await fetch(`http://localhost:8080/api/posts?submenuId=${submenuId}&page=0&size=3&sort=createdAt,desc&lang=${lang}`, {
+          method: 'GET',
+          credentials: 'include'
+        });
+        const data = await res.json();
+        const posts = data.content || [];
+
+        if (posts.length > 0) {
+          posts.forEach(post => {
+            boardHtml += `
+              <li>
+                <img class="board-thumb" src="${post.thumbnailUrl ? 'http://localhost:8080' + post.thumbnailUrl : 'https://via.placeholder.com/50'}" alt="썸네일">
+                <div class="board-text">
+                  <div class="board-title-text">${post.title}</div>
+                </div>
+                <div class="board-viewcount">조회수 ${post.viewCount}</div>
+              </li>
+            `;
+          });
+          for (let i = posts.length; i < 3; i++) {
+            boardHtml += `<li><div class="no-post">게시글 없음</div></li>`;
+          }
+        } else {
+          for (let i = 0; i < 3; i++) {
+            boardHtml += `<li><div class="no-post">게시글 없음</div></li>`;
+          }
+        }
+      } catch (err) {
+        console.error(`❌ submenuId ${submenuId} 게시판 로드 실패`, err);
+        for (let i = 0; i < 3; i++) {
+          boardHtml += `<li><div class="no-post">게시글 없음</div></li>`;
+        }
+      }
+
+      boardHtml += `</ul><a class="more-link" href="${board.link}">더보기</a>`;
+      boardItem.innerHTML = boardHtml;
+      container.appendChild(boardItem);
+    }
+  }
 </script>
 
 <main>
@@ -213,97 +246,13 @@ document.addEventListener('DOMContentLoaded', () => {
         <img src="calend_final_1300x350.png" alt="캘린더 이미지" style="width: 100%; height: 100%; object-fit: contain;">
       </div>
     </div>
-
     <div id="boardContainer" class="board-grid"></div>
   </div>
 </main>
 
 <footer>
-  ⓒ 2025 YonU | 연세대학교 유학생 커뮤니티
+  © 2025 YonU | 연세대학교 유학생 커뮤니티
 </footer>
-
-<script>
-const boardMap = {
-  1: { title: "장터 게시판", link: "board.html?submenuId=1" },
-  2: { title: "자유 게시판", link: "board.html?submenuId=2" },
-  3: { title: "새내기 게시판", link: "board.html?submenuId=3" },
-  4: { title: "학과 게시판", link: "board.html?submenuId=4" }
-};
-
-async function loadBoards() {
-  const container = document.getElementById('boardContainer');
-  container.innerHTML = '';
-
-  for (const submenuId in boardMap) {
-    const board = boardMap[submenuId];
-    const boardItem = document.createElement('div');
-    boardItem.className = 'board-item';
-
-    let boardHtml = `
-      <h2><a href="${board.link}">${board.title}</a></h2>
-      <ul>
-    `;
-
-    try {
-      const response = await fetch(`http://localhost:8080/api/posts?submenuId=${submenuId}&page=0&size=3&sort=createdAt,desc`, {
-        method: 'GET',
-        credentials: 'include'
-      });
-      const data = await response.json();
-
-      const posts = data.content || [];
-      if (posts.length > 0) {
-        posts.forEach(post => {
-          boardHtml += `
-            <li>
-              <img class="board-thumb" src="${post.thumbnailUrl ? 'http://localhost:8080' + post.thumbnailUrl : 'https://via.placeholder.com/50'}" alt="썸네일">
-              <div class="board-text">
-                <div class="board-title-text">${post.title}
-                  </div>
-              </div>
-              <div class="board-viewcount">조회수 ${post.viewCount}</div>
-            </li>
-          `;
-        });
-        for (let i = posts.length; i < 3; i++) {
-          boardHtml += `
-            <li>
-              <div class="no-post">게시글 없음</div>
-            </li>
-          `;
-        }
-      } else {
-        for (let i = 0; i < 3; i++) {
-          boardHtml += `
-            <li>
-              <div class="no-post">게시글 없음</div>
-            </li>
-          `;
-        }
-      }
-    } catch (err) {
-      console.error(`❌ submenuId ${submenuId} 게시판 로드 실패:`, err);
-      for (let i = 0; i < 3; i++) {
-        boardHtml += `
-          <li>
-            <div class="no-post">게시글 없음</div>
-          </li>
-        `;
-      }
-    }
-
-    boardHtml += `
-      </ul>
-      <a class="more-link" href="${board.link}">더보기</a>
-    `;
-
-    boardItem.innerHTML = boardHtml;
-    container.appendChild(boardItem);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', loadBoards);
-</script>
 
 </body>
 </html>
