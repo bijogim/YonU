@@ -233,9 +233,9 @@
 
   let url = '';
   if (type === 'like') {
-    url = `http://localhost:8080/posts/${postId}/like`;
+    url = `http://localhost:8080/api/posts/${postId}/like`;
   } else {
-    url = `http://localhost:8080/posts/${postId}/dislike`;
+    url = `http://localhost:8080/api/posts/${postId}/dislike`;
   }
 
   fetch(url, {
@@ -320,13 +320,13 @@ window.onload = function() {
   }
 
   // ✅ 조회수 먼저 1 증가시킨다!
-  fetch(`http://localhost:8080/posts/${postId}/view`, {
+  fetch(`http://localhost:8080/api/posts/${postId}/view`, {
     method: 'PATCH'
   })
   .then(response => {
     if (!response.ok) throw new Error('조회수 증가 실패');
     // 조회수 증가 성공했으면 -> 게시글 가져오기
-    return fetch(`http://localhost:8080/posts/id/${postId}`);
+    return fetch(`http://localhost:8080/api/posts/id/${postId}`);
   })
   .then(response => {
     if (!response.ok) throw new Error('게시글을 불러올 수 없습니다.');

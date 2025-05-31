@@ -98,17 +98,21 @@
     <div class="form-group">
       <label for="board">게시판 선택</label>
       <select id="board">
-        <option value="0">게시판을 선택하세요</option>
         <option value="1">학교 공지</option>
         <option value="2">학교생활</option>
         <option value="3">FAQ</option>
-        <option value="4">건의사항 링크</option>
+        <option value="4">관공서 링크</option>
       </select>
     </div>
 
     <div class="form-group">
       <label for="title">제목</label>
       <input type="text" id="title" placeholder="제목을 입력해주세요">
+    </div>
+
+    <div class="form-group">
+      <label for="hashtags">해시태그</label>
+      <input type="text" id="hashtags" placeholder="#태그1 #태그2 형식으로 입력해주세요">
     </div>
 
     <div class="form-group">
@@ -125,6 +129,22 @@
   </div>
 
 <script>
+const boardSelect = document.getElementById('board');
+const fileInput = document.getElementById('file');
+
+// 게시판 변경될 때마다 파일 업로드 가능 여부 설정
+boardSelect.addEventListener('change', function() {
+  const selectedBoard = boardSelect.value;
+  if (selectedBoard === "3" || selectedBoard === "4") {
+    // FAQ, 관공서 링크: 첨부파일 비활성화
+    fileInput.disabled = true;
+    fileInput.value = ""; // 선택된 파일도 제거
+  } else {
+    // 학교공지, 학교생활: 첨부파일 활성화
+    fileInput.disabled = false;
+  }
+});
+
 function submitPost() {
   const board = document.getElementById("board").value;
   const title = document.getElementById("title").value.trim();
@@ -132,31 +152,89 @@ function submitPost() {
   const fileInput = document.getElementById("file");
   const file = fileInput.files[0];
 
-  const allowedExtensions = ["jpg", "jpeg", "png", "pdf", "doc", "docx"];
-  const maxFileSize = 5 * 1024 * 1024; // 5MB
-
-  let isValid = true;
-
-  if (!title || !content) isValid = false;
-  if (board === "0") isValid = false;
-
-  // 파일이 첨부된 경우에만 검증
-  if (file) {
-    if (file.size > maxFileSize) {
-      isValid = false;
-    } else {
-      const ext = file.name.split(".").pop().toLowerCase();
-      if (!allowedExtensions.includes(ext)) isValid = false;
-    }
+  if (!title || !content || board === "0") {
+    alert("제목, 본문, 게시판을 확인해주세요.");
+    return;
   }
 
-  if (isValid) {
-    alert("게시물이 작성되었습니다.");
+  const boardToSubmenuId = {
+    1: 5, // 학교공지
+    2: 6, // 학교생활
+    3: 7, // FAQ
+    4: 8  // 관공서 링크
+  };
+  const submenuId = boardToSubmenuId[board];
+
+  const author = "익명";
+
+  if (board === "1" || board === "2") {
+    // 학교공지, 학교생활: 첨부파일 가능
+    const formData = new FormData();
+    formData.append("submenuId", submenuId);
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("author", author);
+    const hashtags = document.getElementById('hashtags').value.trim();
+    formData.append("hashtags", hashtags);
+    if (file) {
+      formData.append("thumbnail", file);
+    }
+
+    fetch('http://localhost:8080/api/posts', {   
+      method: 'POST',
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('게시글 등록 실패');
+      }
+      return response.json();
+    })
+    .then(data => {
+      alert("게시물이 성공적으로 작성되었습니다.");
+      window.location.href = "campus_life.html#school-life";
+    })
+    .catch(error => {
+      console.error('게시글 작성 에러:', error);
+      alert('게시글 작성에 실패했습니다.');
+    });
+
   } else {
-    alert("제목,본문,게시판을 확인해주세요");
+    // FAQ, 관공서 링크: 첨부파일 없음
+   const hashtags = document.getElementById('hashtags').value.trim() || ""; // 빈값이면 "" 기본
+
+const postData = {
+  submenuId: submenuId,
+  title: title,
+  content: content,
+  author: author,
+  hashtags: hashtags, // 항상 문자열
+  thumbnailUrl: ""
+};
+
+    fetch('http://localhost:8080/api/posts/json', {  // JSON용 별도 엔드포인트
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(postData)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('게시글 등록 실패');
+      }
+      return response.json();
+    })
+    .then(data => {
+      alert("게시물이 성공적으로 작성되었습니다.");
+      window.location.href = "campus_life.html#school-life";
+    })
+    .catch(error => {
+      console.error('게시글 작성 에러:', error);
+      alert('게시글 작성에 실패했습니다.');
+    });
   }
 }
 </script>
-
 </body>
 </html>
